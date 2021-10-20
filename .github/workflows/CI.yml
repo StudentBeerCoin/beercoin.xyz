@@ -17,4 +17,4 @@ jobs:
             git restore composer.lock && git pull && composer install --no-dev --optimize-autoloader && bin/console doctrine:migration:migrate --no-interaction
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
-          pass: ${{ secrets.PASS }}
+          key: ${{ secrets.SSHKEY }}
