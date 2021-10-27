@@ -8,10 +8,10 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class LandingPageTest extends WebTestCase
 {
-    public function testSomething(): void
+    public function testLandingPageIsLoadedSuccessfully(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/');
+        $client->request('GET', '/');
 
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('h1', 'BeerCoin');
