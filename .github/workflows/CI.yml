@@ -9,11 +9,6 @@ jobs:
   CI:
     runs-on: ubuntu-latest
     steps:
-      - name: Codecov
-        uses: codecov/codecov-action@v2.1.0
-        with:
-          token: ${{ secrets.CODECOV }}
-          files: ./coverage.xml
       - name: Connect via SSH
         uses: fifsky/ssh-action@master
         with:
