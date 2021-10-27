@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1635358397">
-  <project timestamp="1635358397">
+<coverage generated="1635359214">
+  <project timestamp="1635359214">
     <file name="/home/sokoloowski/Dokumenty/beercoin/src/Controller/MainController.php">
       <class name="App\Controller\MainController" namespace="global">
         <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="2" elements="3" coveredelements="3"/>
