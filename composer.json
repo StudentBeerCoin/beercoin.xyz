@@ -45,6 +45,11 @@
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
+        "friendsoftwig/twigcs": "^5.1",
+        "phpstan/phpstan": "^0.12.99",
+        "phpstan/phpstan-doctrine": "^0.12.44",
+        "phpstan/phpstan-phpunit": "^0.12.22",
+        "phpstan/phpstan-symfony": "^0.12.44",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "5.3.*",
         "symfony/css-selector": "5.3.*",
@@ -52,7 +57,10 @@
         "symfony/maker-bundle": "^1.0",
         "symfony/phpunit-bridge": "^5.3",
         "symfony/stopwatch": "5.3.*",
-        "symfony/web-profiler-bundle": "5.3.*"
+        "symfony/web-profiler-bundle": "5.3.*",
+        "symplify/easy-ci": "^9.3",
+        "symplify/easy-coding-standard": "^9.4",
+        "symplify/phpstan-extensions": "^9.3"
     },
     "config": {
         "optimize-autoloader": true,
