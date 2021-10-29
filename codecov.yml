@@ -1,4 +1,0 @@
-coverage:
-  ignore:
-    - src/Kernel.php
-    - src/DataFixtures/*.php
