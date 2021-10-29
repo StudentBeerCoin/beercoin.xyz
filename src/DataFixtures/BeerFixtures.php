@@ -15,8 +15,11 @@ class BeerFixtures extends Fixture
     {
         $beer = new Beer();
         NSA::setProperty($beer, 'id', '00000000-0000-0000-0000-000000000001');
-        $manager->persist($beer);
+        $beer->setBrand('Kustosz');
+        $beer->setName('Kustosz o smaku Tequila');
+        $beer->setAlcohol(6);
 
+        $manager->persist($beer);
         $manager->flush();
     }
 }
