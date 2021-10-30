@@ -21,8 +21,18 @@ class UserFixtures extends Fixture
         $user->setEmail('jkowalski@example.com');
         $user->setPhoneNumber('123123123');
         $this->addReference('user', $user);
-
         $manager->persist($user);
+
+        $user = new User();
+        NSA::setProperty($user, 'id', '00000000-0000-0000-0000-000000000002');
+        $user->setUsername('koneserrr');
+        $user->setName('Adam');
+        $user->setSurname('Nowak');
+        $user->setEmail('anowak@example.com');
+        $user->setPhoneNumber('456456456');
+        $this->addReference('user2', $user);
+        $manager->persist($user);
+
         $manager->flush();
     }
 }
