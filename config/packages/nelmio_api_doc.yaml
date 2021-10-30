@@ -1,0 +1,18 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: BeerCoin
+            description: Waluta studencka nabiera nowego znaczenia
+            version: 1.0.0
+        tags:
+            - name: Beer
+              description: Beer related endpoints
+            - name: History
+              description: History related endpoints
+            - name: Offer
+              description: Offer related endpoints
+            - name: User
+              description: User related endpoints
+    areas:
+        path_patterns:
+            - ^/api/(?!docs(.json|)$) # Accepts routes under /api except /api/docs
