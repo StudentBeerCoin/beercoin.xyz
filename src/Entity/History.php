@@ -19,6 +19,23 @@ class History
      */
     private string $id;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Offer::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private Offer $offer;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private User $counterparty;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private int $amount;
+
     public function __construct()
     {
         $this->id = Uuid::uuid4()->toString();
@@ -27,5 +44,35 @@ class History
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function getOffer(): ?Offer
+    {
+        return $this->offer;
+    }
+
+    public function setOffer(?Offer $offer): void
+    {
+        $this->offer = $offer;
+    }
+
+    public function getCounterparty(): ?User
+    {
+        return $this->counterparty;
+    }
+
+    public function setCounterparty(?User $counterparty): void
+    {
+        $this->counterparty = $counterparty;
+    }
+
+    public function getAmount(): ?int
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(int $amount): void
+    {
+        $this->amount = $amount;
     }
 }
