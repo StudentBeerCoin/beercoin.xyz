@@ -18,6 +18,7 @@ class BeerFixtures extends Fixture
         $beer->setBrand('Kustosz');
         $beer->setName('Kustosz o smaku Tequila');
         $beer->setAlcohol(6);
+        $this->addReference('beer', $beer);
 
         $manager->persist($beer);
         $manager->flush();

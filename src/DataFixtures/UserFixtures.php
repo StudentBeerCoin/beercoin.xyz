@@ -20,6 +20,7 @@ class UserFixtures extends Fixture
         $user->setSurname('Kowalski');
         $user->setEmail('jkowalski@example.com');
         $user->setPhoneNumber('123123123');
+        $this->addReference('user', $user);
 
         $manager->persist($user);
         $manager->flush();
