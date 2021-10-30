@@ -15,8 +15,13 @@ class UserFixtures extends Fixture
     {
         $user = new User();
         NSA::setProperty($user, 'id', '00000000-0000-0000-0000-000000000001');
-        $manager->persist($user);
+        $user->setUsername('kustosz enjoyer');
+        $user->setName('Jan');
+        $user->setSurname('Kowalski');
+        $user->setEmail('jkowalski@example.com');
+        $user->setPhoneNumber('123123123');
 
+        $manager->persist($user);
         $manager->flush();
     }
 }
