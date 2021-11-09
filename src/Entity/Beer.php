@@ -56,6 +56,18 @@ class Beer
         $this->packing = true;
     }
 
+    public function __toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'brand' => $this->getBrand(),
+            'name' => $this->getName(),
+            'volume' => $this->getVolume(),
+            'alcohol' => $this->getAlcohol(),
+            'packing' => $this->isBottle() ? 'bottle' : 'can',
+        ];
+    }
+
     public function getId(): string
     {
         return $this->id;
@@ -114,17 +126,5 @@ class Beer
     public function setPacking(bool $packing): void
     {
         $this->packing = $packing;
-    }
-
-    public function __toArray(): array
-    {
-        return [
-            'id' => $this->getId(),
-            'brand' => $this->getBrand(),
-            'name' => $this->getName(),
-            'volume' => $this->getVolume(),
-            'alcohol' => $this->getAlcohol(),
-            'packing' => $this->isBottle() ? 'bottle' : 'can'
-        ];
     }
 }

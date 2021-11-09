@@ -71,6 +71,24 @@ class Offer
         $this->typeOfTransaction = self::SELL;
     }
 
+    public function __toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'owner' => $this->getOwner()
+                ->getId(),
+            'beer' => $this->getBeer()
+                ->getId(),
+            'amount' => $this->getAmount(),
+            'price' => $this->getPrice(),
+            'total' => $this->getAmount() * $this->getPrice(),
+            'location' => [
+                'x' => $this->getLocationX(),
+                'y' => $this->getLocationY(),
+            ],
+        ];
+    }
+
     public function getId(): string
     {
         return $this->id;
@@ -165,22 +183,5 @@ class Offer
     public function setTypeOfTransaction(bool $typeOfTransaction): void
     {
         $this->typeOfTransaction = $typeOfTransaction;
-    }
-
-    public function __toArray(): array
-    {
-        return [
-            'id' => $this->getId(),
-            'owner' => $this->getOwner()->getId(),
-            'beer' => $this->getBeer()->getId(),
-            'amount' => $this->getAmount(),
-            'price' => $this->getPrice(),
-            'total' => $this->getAmount() * $this->getPrice(),
-            'location' => [
-                'x' => $this->getLocationX(),
-                'y' => $this->getLocationY()
-            ]
-
-        ];
     }
 }
