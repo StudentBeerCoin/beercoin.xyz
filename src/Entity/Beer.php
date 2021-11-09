@@ -115,4 +115,16 @@ class Beer
     {
         $this->packing = $packing;
     }
+
+    public function __toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'brand' => $this->getBrand(),
+            'name' => $this->getName(),
+            'volume' => $this->getVolume(),
+            'alcohol' => $this->getAlcohol(),
+            'packing' => $this->isBottle() ? 'bottle' : 'can'
+        ];
+    }
 }
