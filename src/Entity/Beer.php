@@ -56,6 +56,18 @@ class Beer
         $this->packing = true;
     }
 
+    public function __toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'brand' => $this->getBrand(),
+            'name' => $this->getName(),
+            'volume' => $this->getVolume(),
+            'alcohol' => $this->getAlcohol(),
+            'packing' => $this->isBottle() ? 'bottle' : 'can',
+        ];
+    }
+
     public function getId(): string
     {
         return $this->id;
