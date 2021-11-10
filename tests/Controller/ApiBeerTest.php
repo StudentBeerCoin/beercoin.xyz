@@ -15,6 +15,5 @@ class ApiBeerTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
         self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
-//        self::assertSelectorTextContains('h1', 'Hello World');
     }
 }
