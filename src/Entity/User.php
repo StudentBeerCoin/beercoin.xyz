@@ -69,8 +69,25 @@ class User
     {
         $this->id = Uuid::uuid4()->toString();
         $this->balance = 0;
-        $this->locationX = 50.0687252;
-        $this->locationY = 19.9066193;
+        $this->locationX = 50.068785;
+        $this->locationY = 19.906250;
+    }
+
+    public function __toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'username' => $this->getUsername(),
+            'name' => $this->getName(),
+            'surname' => $this->getSurname(),
+            'email' => $this->getEmail(),
+            'phoneNumber' => $this->getPhoneNumber(),
+            'balance' => $this->getBalance(),
+            'location' => [
+                'x' => $this->getLocationX(),
+                'y' => $this->getLocationY(),
+            ],
+        ];
     }
 
     public function getId(): string
