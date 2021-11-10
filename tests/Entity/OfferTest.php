@@ -35,12 +35,18 @@ class OfferTest extends TestCase
         $offer->setTypeOfTransaction(Offer::BUY);
 
         // Check if offer is updated
-        self::assertSame($user, $offer->getOwner());
-        self::assertSame($beer, $offer->getBeer());
-        self::assertSame(5, $offer->getAmount());
-        self::assertSame(0.4321, $offer->getPrice());
-        self::assertSame([0.1, 0.2], $offer->getLocation());
-        self::assertTrue($offer->isBuying());
-        self::assertFalse($offer->isSelling());
+        $testArray = [
+            'id' => $offer->getId(),
+            'owner' => $user->getId(),
+            'beer' => $beer->getId(),
+            'amount' => 5,
+            'price' => 0.4321,
+            'total' => 5 * 0.4321,
+            'location' => [
+                'x' => 0.1,
+                'y' => 0.2,
+            ],
+        ];
+        self::assertSame($testArray, $offer->__toArray());
     }
 }

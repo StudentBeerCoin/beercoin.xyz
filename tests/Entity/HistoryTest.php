@@ -27,8 +27,12 @@ class HistoryTest extends TestCase
         $history->setAmount(2);
 
         // Check if history is updated
-        self::assertSame($offer, $history->getOffer());
-        self::assertSame($user, $history->getCounterparty());
-        self::assertSame(2, $history->getAmount());
+        $testArray = [
+            'id' => $history->getId(),
+            'offer' => $offer->getId(),
+            'counterparty' => $user->getId(),
+            'amount' => 2,
+        ];
+        self::assertSame($testArray, $history->__toArray());
     }
 }
