@@ -41,27 +41,39 @@ class History
         $this->id = Uuid::uuid4()->toString();
     }
 
+    public function __toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'offer' => $this->getOffer()
+                ->getId(),
+            'counterparty' => $this->getCounterparty()
+                ->getId(),
+            'amount' => $this->getAmount(),
+        ];
+    }
+
     public function getId(): string
     {
         return $this->id;
     }
 
-    public function getOffer(): ?Offer
+    public function getOffer(): Offer
     {
         return $this->offer;
     }
 
-    public function setOffer(?Offer $offer): void
+    public function setOffer(Offer $offer): void
     {
         $this->offer = $offer;
     }
 
-    public function getCounterparty(): ?User
+    public function getCounterparty(): User
     {
         return $this->counterparty;
     }
 
-    public function setCounterparty(?User $counterparty): void
+    public function setCounterparty(User $counterparty): void
     {
         $this->counterparty = $counterparty;
     }

@@ -16,8 +16,8 @@ class UserTest extends TestCase
         // Check defaults
         self::assertNotNull($user->getId());
         self::assertSame(0.0, $user->getBalance());
-        self::assertSame(50.0687252, $user->getLocationX());
-        self::assertSame(19.9066193, $user->getLocationY());
+        self::assertSame(50.068785, $user->getLocationX());
+        self::assertSame(19.906250, $user->getLocationY());
         self::assertSame([$user->getLocationX(), $user->getLocationY()], $user->getLocation());
 
         // Set custom user properties
@@ -30,12 +30,19 @@ class UserTest extends TestCase
         $user->setLocation(0.1, 0.2);
 
         // Check if user is updated
-        self::assertSame('t_username', $user->getUsername());
-        self::assertSame('t_name', $user->getName());
-        self::assertSame('t_surname', $user->getSurname());
-        self::assertSame('test@example.com', $user->getEmail());
-        self::assertSame('123123123', $user->getPhoneNumber());
-        self::assertSame(1.23456789, $user->getBalance());
-        self::assertSame([0.1, 0.2], $user->getLocation());
+        $testArray = [
+            'id' => $user->getId(),
+            'username' => 't_username',
+            'name' => 't_name',
+            'surname' => 't_surname',
+            'email' => 'test@example.com',
+            'phoneNumber' => '123123123',
+            'balance' => 1.23456789,
+            'location' => [
+                'x' => 0.1,
+                'y' => 0.2,
+            ],
+        ];
+        self::assertSame($testArray, $user->__toArray());
     }
 }
