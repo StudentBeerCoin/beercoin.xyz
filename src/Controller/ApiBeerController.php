@@ -18,6 +18,7 @@ class ApiBeerController extends AbstractController
 {
     /**
      * @Route("/api/beer/{beer}/details", name="beer_details", methods={"GET"})
+     * @OA\Parameter(name="beer", in="path", description="UUID of beer")
      * @OA\Response(
      *     response=200,
      *     description="Returns specified beer details",
