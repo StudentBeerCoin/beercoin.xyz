@@ -78,8 +78,8 @@ class ApiBeerController extends AbstractController
      * )
      * 
      */
-    public function addBeer(Offer $offer): Response
+    public function addBeer(Beer $beer): Response
     {
-        return new JsonResponse($offer->__toArray());
+        return new JsonResponse($beer->__toArray());
     }
 }
