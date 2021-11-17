@@ -160,8 +160,46 @@ class ApiOfferController extends AbstractController
      *        @OA\Property(property="message", type="string")
      *     )
      * )
+     * @OA\Response(
+     *     response=404,
+     *     description="Offer does not exists",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="message", type="string")
+     *     )
+     * )
      */
     public function updateOffer(Offer $offer): Response
+    {
+        return new Response(null, 204);
+    }
+
+    /**
+     * @Route("/api/offer/{offer}/delete", name="offer_delete", methods={"DELETE"})
+     * @OA\Parameter(name="offer", in="path", description="UUID of offer")
+     * @OA\RequestBody(
+     *     required=true,
+     *     description="Owner's authentication data",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="user", type="string"),
+     *        @OA\Property(property="password", type="string")
+     *     ),
+     * )
+     * @OA\Response(
+     *     response=204,
+     *     description="Successfuly removed offer"
+     * )
+     * @OA\Response(
+     *     response=404,
+     *     description="Offer does not exists",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="message", type="string")
+     *     )
+     * )
+     */
+    public function deleteOffer(Offer $offer): Response
     {
         return new Response(null, 204);
     }
