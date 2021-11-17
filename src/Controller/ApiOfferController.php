@@ -112,7 +112,6 @@ class ApiOfferController extends AbstractController
      *          @OA\Property(property="beer", type="string"),
      *          @OA\Property(property="amount", type="number"),
      *          @OA\Property(property="price", type="number"),
-     *          @OA\Property(property="total", type="number"),
      *          @OA\Property(property="location", type="object"),
      *          @OA\Property(property="type", type="string")
      *      )
@@ -131,6 +130,38 @@ class ApiOfferController extends AbstractController
      * )
      */
     public function addOffer(): Response
+    {
+        return new Response(null, 204);
+    }
+
+    /**
+     * @Route("/api/offer/{offer}/update", name="offer_update", methods={"PUT"})
+     * @OA\Parameter(name="offer", in="path", description="UUID of offer")
+     * @OA\RequestBody(
+     *     required=true,
+     *     description="Offer data that is being updated",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="beer", type="string"),
+     *        @OA\Property(property="amount", type="number"),
+     *        @OA\Property(property="price", type="number"),
+     *        @OA\Property(property="location", ref="#/components/schemas/Location"),
+     *     ),
+     * )
+     * @OA\Response(
+     *     response=204,
+     *     description="Successfuly changed offer's details"
+     * )
+     * @OA\Response(
+     *     response=400,
+     *     description="Incorrect request",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="message", type="string")
+     *     )
+     * )
+     */
+    public function updateOffer(Offer $offer): Response
     {
         return new Response(null, 204);
     }
