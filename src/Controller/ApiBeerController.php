@@ -28,10 +28,10 @@ class ApiBeerController extends AbstractController
      * @Route("/api/beer/beers", name="beer_list", methods={"GET"})
      * @OA\Response(
      *     response=200,
-     *     description="Returns IDs of beers",
+     *     description="Returns all beers",
      *     @OA\JsonContent(
      *        type="array",
-     *        @OA\Items(type="string")
+     *        @OA\Items(ref="#/components/schemas/Beer")
      *     )
      * )
      */
@@ -57,13 +57,7 @@ class ApiBeerController extends AbstractController
      *     response=200,
      *     description="Returns specified beer details",
      *     @OA\JsonContent(
-     *        type="object",
-     *        @OA\Property(property="id", type="string"),
-     *        @OA\Property(property="brand", type="string"),
-     *        @OA\Property(property="name", type="string"),
-     *        @OA\Property(property="volume", type="number"),
-     *        @OA\Property(property="alcohol", type="number"),
-     *        @OA\Property(property="packing", type="string"),
+     *        ref="#/components/schemas/Beer"
      *     )
      * )
      * @OA\Response(
@@ -92,7 +86,7 @@ class ApiBeerController extends AbstractController
      *          @OA\Property(property="name", type="string"),
      *          @OA\Property(property="volume", type="number"),
      *          @OA\Property(property="alcohol", type="number"),
-     *          @OA\Property(property="packaging", type="boolean")
+     *          @OA\Property(property="packing", type="string")
      *      )
      * )
      * @OA\Response(

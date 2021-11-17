@@ -23,7 +23,7 @@ class ApiHistoryController extends AbstractController
      *     description="Returns IDs of all transactions",
      *     @OA\JsonContent(
      *        type="array",
-     *        @OA\Items(type="string")
+     *        @OA\Items(ref="#/components/schemas/History")
      *     )
      * )
      */
@@ -39,11 +39,7 @@ class ApiHistoryController extends AbstractController
      *     response=200,
      *     description="Returns specified transaction details",
      *     @OA\JsonContent(
-     *        type="object",
-     *        @OA\Property(property="id", type="string"),
-     *        @OA\Property(property="offer", type="string"),
-     *        @OA\Property(property="counterparty", type="string"),
-     *        @OA\Property(property="amount", type="number")
+     *        ref="#/components/schemas/History"
      *     ),
      * )
      */

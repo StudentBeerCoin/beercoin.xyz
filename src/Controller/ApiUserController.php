@@ -22,21 +22,11 @@ class ApiUserController extends AbstractController
      * @OA\Parameter(name="user", in="path", description="UUID of user")
      * @OA\Response(
      *     response=200,
-     *     description="Returns specified history details",
+     *     description="Returns user details",
      *     @OA\JsonContent(
-     *        type="object",
-     *        @OA\Property(property="id", type="string"),
-     *        @OA\Property(property="username", type="string"),
-     *        @OA\Property(property="name", type="string"),
-     *        @OA\Property(property="surname", type="string"),
-     *        @OA\Property(property="email", type="string"),
-     *        @OA\Property(property="phoneNumber", type="string"),
-     *        @OA\Property(property="balance", type="number"),
-     *        @OA\Property(property="location", type="object")
+     *        ref="#/components/schemas/User"
      *     ),
      * )
-     *
-     * TODO: display details of location property
      */
     public function userDetails(User $user): Response
     {
@@ -48,14 +38,31 @@ class ApiUserController extends AbstractController
      * @OA\Parameter(name="user", in="path", description="UUID of user")
      * @OA\Response(
      *     response=200,
-     *     description="Returns IDs of user's active offers",
+     *     description="Returns user's active offers",
      *     @OA\JsonContent(
      *        type="array",
-     *        @OA\Items(type="string")
+     *        @OA\Items(ref="#/components/schemas/Offer")
      *     )
      * )
      */
     public function activeOffers(User $user): Response
+    {
+        return new JsonResponse([]);
+    }
+
+    /**
+     * @Route("/api/user/{user}/history", name="user_history", methods={"GET"})
+     * @OA\Parameter(name="user", in="path", description="UUID of user")
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns user's transaction history",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref="#/components/schemas/History")
+     *     )
+     * )
+     */
+    public function userHistory(User $user): Response
     {
         return new JsonResponse([]);
     }

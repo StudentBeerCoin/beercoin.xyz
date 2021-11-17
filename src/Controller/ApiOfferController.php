@@ -20,10 +20,10 @@ class ApiOfferController extends AbstractController
      * @Route("/api/offer/offers", name="offer_list", methods={"GET"})
      * @OA\Response(
      *     response=200,
-     *     description="Returns IDs of all offers",
+     *     description="Returns all offers",
      *     @OA\JsonContent(
      *        type="array",
-     *        @OA\Items(type="string")
+     *        @OA\Items(ref="#/components/schemas/Offer")
      *     )
      * )
      */
@@ -36,10 +36,10 @@ class ApiOfferController extends AbstractController
      * @Route("/api/offer/offers/buy", name="offer_buy", methods={"GET"})
      * @OA\Response(
      *     response=200,
-     *     description="Returns IDs of all buying offers",
+     *     description="Returns all buying offers",
      *     @OA\JsonContent(
      *        type="array",
-     *        @OA\Items(type="string")
+     *        @OA\Items(ref="#/components/schemas/Offer")
      *     )
      * )
      */
@@ -52,10 +52,10 @@ class ApiOfferController extends AbstractController
      * @Route("/api/offer/offers/sell", name="offer_sell", methods={"GET"})
      * @OA\Response(
      *     response=200,
-     *     description="Returns IDs of all selling offers",
+     *     description="Returns all selling offers",
      *     @OA\JsonContent(
      *        type="array",
-     *        @OA\Items(type="string")
+     *        @OA\Items(ref="#/components/schemas/Offer")
      *     )
      * )
      */
@@ -71,16 +71,8 @@ class ApiOfferController extends AbstractController
      *     response=200,
      *     description="Returns specified offer details",
      *     @OA\JsonContent(
-     *        type="object",
-     *        @OA\Property(property="id", type="string"),
-     *        @OA\Property(property="owner", type="string"),
-     *        @OA\Property(property="beer", type="string"),
-     *        @OA\Property(property="amount", type="number"),
-     *        @OA\Property(property="price", type="number"),
-     *        @OA\Property(property="total", type="number"),
-     *        @OA\Property(property="location", type="object"),
-     *        @OA\Property(property="type", type="boolean")
-     *     ),
+     *        ref="#/components/schemas/Offer"
+     *     )
      * )
      *
      * TODO: display details of location property
@@ -97,10 +89,10 @@ class ApiOfferController extends AbstractController
      * @OA\Parameter(name="radius", in="path", description="Radius to find offers nearby")
      * @OA\Response(
      *     response=200,
-     *     description="Returns list of IDs of offers",
+     *     description="Returns list of offers nearby",
      *     @OA\JsonContent(
      *        type="array",
-     *        @OA\Items(type="string")
+     *        @OA\Items(ref="#/components/schemas/Offer")
      *     )
      * )
      */
@@ -122,7 +114,7 @@ class ApiOfferController extends AbstractController
      *          @OA\Property(property="price", type="number"),
      *          @OA\Property(property="total", type="number"),
      *          @OA\Property(property="location", type="object"),
-     *          @OA\Property(property="type", type="boolean")
+     *          @OA\Property(property="type", type="string")
      *      )
      * )
      * @OA\Response(
