@@ -80,6 +80,7 @@ class ApiUserController extends AbstractController
      *        @OA\Property(property="surname", type="string"),
      *        @OA\Property(property="email", type="string"),
      *        @OA\Property(property="phoneNumber", type="string"),
+     *        @OA\Property(property="location", ref="#/components/schemas/Location")
      *     ),
      * )
      * @OA\Response(
@@ -95,7 +96,7 @@ class ApiUserController extends AbstractController
      *     )
      * )
      */
-    public function updateDetails(User $user): Response
+    public function updateUser(User $user): Response
     {
         return new Response(null, 204);
     }
