@@ -50,4 +50,36 @@ class ApiBeerController extends AbstractController
     {
         return new JsonResponse($beer->__toArray());
     }
+
+    /**
+     * @Route("/api/beer/add", name="beer_add", methods={"POST"})
+     * @OA\RequestBody(
+     *       required=true,
+     *       description="Offer data",
+     *       @OA\JsonContent(
+     *          type="object",
+     *          @OA\Property(property="brand", type="string"),
+     *          @OA\Property(property="name", type="string"),
+     *          @OA\Property(property="volume", type="number"),
+     *          @OA\Property(property="alcohol", type="number"),
+     *          @OA\Property(property="packaging", type="bool")
+     *      )
+     * )
+     * @OA\Response(
+     *     response=204,
+     *     description="Successfuly added new beer"
+     * )
+     * @OA\Response(
+     *     response=400,
+     *     description="Incorrect beer details",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="message", type="string")
+     *     )
+     * )
+     */
+    public function addBeer(): Response
+    {
+        return new Response('', 204);
+    }
 }

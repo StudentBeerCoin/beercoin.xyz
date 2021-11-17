@@ -38,7 +38,57 @@ class ApiUserController extends AbstractController
      *
      * TODO: display details of location property
      */
-    public function historyDetails(User $user): Response
+    public function userDetails(User $user): Response
+    {
+        return new JsonResponse($user->__toArray());
+    }
+
+    /**
+     * @Route("/api/user/{user}/update", name="user_update", methods={"PUT"})
+     * @OA\Parameter(name="user", in="path", description="UUID of user")
+     * @OA\RequestBody(
+     *     required=true,
+     *     description="User data that is being updated",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="username", type="string"),
+     *        @OA\Property(property="name", type="string"),
+     *        @OA\Property(property="surname", type="string"),
+     *        @OA\Property(property="email", type="string"),
+     *        @OA\Property(property="phoneNumber", type="string"),
+     *     ),
+     * )
+     * @OA\Response(
+     *     response=204,
+     *     description="Successfuly changed user's details"
+     * )
+     * @OA\Response(
+     *     response=400,
+     *     description="Incorrect request",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="message", type="string")
+     *     )
+     * )
+     */
+    public function updateDetails(User $user): Response
+    {
+        return new JsonResponse($user->__toArray());
+    }
+
+    /**
+     * @Route("/api/user/{user}/offers", name="user_active_offers", methods={"GET"})
+     * @OA\Parameter(name="user", in="path", description="UUID of user")
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns ids of user's active offers",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(type="string")
+     *     )
+     * )
+     */
+    public function activeOffers(User $user): Response
     {
         return new JsonResponse($user->__toArray());
     }
