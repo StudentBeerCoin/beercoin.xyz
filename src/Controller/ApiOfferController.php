@@ -40,8 +40,9 @@ class ApiOfferController extends AbstractController
     {
         return new JsonResponse($offer->__toArray());
     }
+
     /**
-     * @Route("/api/offer/{offer}/add", name="offer_details", methods={"POST"})
+     * @Route("/api/offer/add", name="offer_add", methods={"POST"})
      * @OA\RequestBody(
      *       required=true,
      *       description="Offer data",
@@ -67,26 +68,28 @@ class ApiOfferController extends AbstractController
      *        @OA\Property(property="message", type="string")
      *     )
      * )
-     * 
      */
-    public function addOffer(Offer $offer): Response
+    public function addOffer(): Response
     {
-        return new JsonResponse($offer->__toArray());
+        return new Response('', 204);
     }
+
     /**
-     * @Route("/api/offer/{offer}/details", name="offer_details", methods={"GET"})
-     * @OA\Parameter(name="offer", in="path", description="localization of user and radius of search scope")
+     * @Route("/api/offer/find/{x}/{y}/{radius}", name="offer_nearby", methods={"GET"})
+     * @OA\Parameter(name="x", in="path", description="User's location latitude")
+     * @OA\Parameter(name="y", in="path", description="User's location longitude")
+     * @OA\Parameter(name="radius", in="path", description="Radius to find offers nearby")
      * @OA\Response(
      *     response=200,
-     *     description="Returns list of ids of offers",
+     *     description="Returns list of IDs of offers",
      *     @OA\JsonContent(
-     *        type="object",
-     *        @OA\Property(property="ids", type="list")
-     *     ),
+     *        type="array",
+     *        @OA\Items(type="string")
+     *     )
      * )
      */
-    public function nearbyOffers(Offer $offer): Response
+    public function nearbyOffers(float $x, float $y, float $radius): Response
     {
-        return new JsonResponse($offer->__toArray());
+        return new Response('Offers nearby...');
     }
 }
