@@ -91,7 +91,7 @@ class ApiBeerController extends AbstractController
      * )
      * @OA\Response(
      *     response=204,
-     *     description="Successfuly added new beer"
+     *     description="Successfully added new beer"
      * )
      * @OA\Response(
      *     response=400,

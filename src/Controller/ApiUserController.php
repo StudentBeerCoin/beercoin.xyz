@@ -85,11 +85,19 @@ class ApiUserController extends AbstractController
      * )
      * @OA\Response(
      *     response=204,
-     *     description="Successfuly changed user's details"
+     *     description="Successfully changed user's details"
      * )
      * @OA\Response(
      *     response=400,
      *     description="Incorrect request",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="message", type="string")
+     *     )
+     * )
+     * @OA\Response(
+     *     response=404,
+     *     description="User does not exists",
      *     @OA\JsonContent(
      *        type="object",
      *        @OA\Property(property="message", type="string")
