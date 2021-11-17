@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Beer;
+use App\Repository\BeerRepository;
 use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,6 +17,35 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ApiBeerController extends AbstractController
 {
+    private BeerRepository $beerRepository;
+
+    public function __construct(BeerRepository $beerRepository)
+    {
+        $this->beerRepository = $beerRepository;
+    }
+
+    /**
+     * @Route("/api/beer/beers", name="beer_list", methods={"GET"})
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns IDs of beers",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(type="string")
+     *     )
+     * )
+     */
+    public function listBeers(): Response
+    {
+        $beers = $this->beerRepository->findAll();
+        $res = [];
+        foreach ($beers as $beer) {
+            $res[] = $beer->getId();
+        }
+
+        return new JsonResponse($res);
+    }
+
     /**
      * @Route("/api/beer/{beer}/details", name="beer_details", methods={"GET"})
      * @OA\Parameter(
@@ -80,6 +110,6 @@ class ApiBeerController extends AbstractController
      */
     public function addBeer(): Response
     {
-        return new Response('', 204);
+        return new Response(null, 204);
     }
 }

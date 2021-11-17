@@ -64,7 +64,8 @@
         "symfony/web-profiler-bundle": "5.3.*",
         "symplify/easy-ci": "^9.3",
         "symplify/easy-coding-standard": "^9.4",
-        "symplify/phpstan-extensions": "^9.3"
+        "symplify/phpstan-extensions": "^9.3",
+      "ext-json": "*"
     },
     "config": {
         "optimize-autoloader": true,

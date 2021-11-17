@@ -71,7 +71,7 @@ class ApiOfferController extends AbstractController
      */
     public function addOffer(): Response
     {
-        return new Response('', 204);
+        return new Response(null, 204);
     }
 
     /**
@@ -90,6 +90,6 @@ class ApiOfferController extends AbstractController
      */
     public function nearbyOffers(float $x, float $y, float $radius): Response
     {
-        return new Response('Offers nearby...');
+        return new JsonResponse([]);
     }
 }
