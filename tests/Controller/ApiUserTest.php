@@ -16,4 +16,20 @@ class ApiUserTest extends WebTestCase
         self::assertResponseIsSuccessful();
         self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
     }
+
+    public function testUpdatingUserData(): void
+    {
+        $client = static::createClient();
+
+        $user = [
+            'username' => 't_newUsername',
+            'name' => 't_newName',
+            'surname' => 't_newSurname',
+            'email' => 't_newEmail@example.com',
+            'phoneNumber' => '999999999',
+        ];
+        $userJson = json_encode($user);
+        self::assertIsString($userJson);
+        $client->request('PUT', '/api/user/00000000-0000-0000-0000-000000000001/update', [], [], [], $userJson);
+    }
 }

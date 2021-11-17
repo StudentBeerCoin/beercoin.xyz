@@ -92,7 +92,7 @@ class ApiBeerController extends AbstractController
      *          @OA\Property(property="name", type="string"),
      *          @OA\Property(property="volume", type="number"),
      *          @OA\Property(property="alcohol", type="number"),
-     *          @OA\Property(property="packaging", type="bool")
+     *          @OA\Property(property="packaging", type="boolean")
      *      )
      * )
      * @OA\Response(

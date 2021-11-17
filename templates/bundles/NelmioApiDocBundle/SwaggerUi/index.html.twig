@@ -1,3 +1,14 @@
 {% extends '@!NelmioApiDoc/SwaggerUi/index.html.twig' %}
 
 {% block header %}{% endblock header %}
+
+{% block stylesheets %}
+    {{ nelmioAsset(assets_mode, 'swagger-ui/swagger-ui.css') }}
+    <style>
+        .swagger-ui .model-box-control, .swagger-ui .models-control, .swagger-ui .opblock-summary-control {
+            padding-right: 20px;
+        }
+
+        div.topbar { display: none; }
+    </style>
+{% endblock stylesheets %}
