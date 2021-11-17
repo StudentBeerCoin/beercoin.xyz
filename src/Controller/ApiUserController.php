@@ -95,6 +95,14 @@ class ApiUserController extends AbstractController
      *        @OA\Property(property="message", type="string")
      *     )
      * )
+     * @OA\Response(
+     *     response=404,
+     *     description="User does not exists",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="message", type="string")
+     *     )
+     * )
      */
     public function updateUser(User $user): Response
     {
