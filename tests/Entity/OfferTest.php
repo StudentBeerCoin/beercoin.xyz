@@ -46,6 +46,7 @@ class OfferTest extends TestCase
                 'x' => 0.1,
                 'y' => 0.2,
             ],
+            'type' => 'buy',
         ];
         self::assertSame($testArray, $offer->__toArray());
     }
