@@ -74,8 +74,14 @@ class ApiOfferController extends AbstractController
      *        ref="#/components/schemas/Offer"
      *     )
      * )
-     *
-     * TODO: display details of location property
+     * @OA\Response(
+     *     response=404,
+     *     description="Offer does not exists",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="message", type="string")
+     *     )
+     * )
      */
     public function offerDetails(Offer $offer): Response
     {
@@ -118,7 +124,7 @@ class ApiOfferController extends AbstractController
      * )
      * @OA\Response(
      *     response=204,
-     *     description="Successfuly added new offer"
+     *     description="Successfully added new offer"
      * )
      * @OA\Response(
      *     response=400,
@@ -130,6 +136,43 @@ class ApiOfferController extends AbstractController
      * )
      */
     public function addOffer(): Response
+    {
+        return new Response(null, 204);
+    }
+
+    /**
+     * @Route("/api/offer/{offer}/buy", name="offer_buy", methods={"POST"})
+     * @OA\RequestBody(
+     *       required=true,
+     *       description="Offer data",
+     *       @OA\JsonContent(
+     *          type="object",
+     *          @OA\Property(property="buyer", type="string"),
+     *          @OA\Property(property="amount", type="number")
+     *      )
+     * )
+     * @OA\Response(
+     *     response=204,
+     *     description="Successfully made transaction"
+     * )
+     * @OA\Response(
+     *     response=400,
+     *     description="Incorrect offer details",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="message", type="string")
+     *     )
+     * )
+     * @OA\Response(
+     *     response=404,
+     *     description="Offer does not exists",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="message", type="string")
+     *     )
+     * )
+     */
+    public function buyOffer(Offer $offer): Response
     {
         return new Response(null, 204);
     }
@@ -150,7 +193,7 @@ class ApiOfferController extends AbstractController
      * )
      * @OA\Response(
      *     response=204,
-     *     description="Successfuly changed offer's details"
+     *     description="Successfully changed offer's details"
      * )
      * @OA\Response(
      *     response=400,
@@ -188,7 +231,7 @@ class ApiOfferController extends AbstractController
      * )
      * @OA\Response(
      *     response=204,
-     *     description="Successfuly removed offer"
+     *     description="Successfully removed offer"
      * )
      * @OA\Response(
      *     response=404,
