@@ -23,17 +23,19 @@ class ApiBeerTest extends WebTestCase
         $client = static::createClient();
 
         $client->request('GET', '/api/beer/beers');
-        assert(is_string($client->getResponse()->getContent()));
+        self::assertIsString($client->getResponse()->getContent());
         self::assertCount(1, json_decode($client->getResponse()->getContent(), true));
 
-        $client->request('POST', '/api/beer/add', [], [], [], (string) json_encode([
+        $beer = [
             'brand' => 'Test Brand',
             'name' => 'Test Beer',
             'volume' => 355,
             'alcohol' => 4.5,
             'packing' => Beer::BOTTLE,
-        ]));
-
+        ];
+        $beerJson = json_encode($beer);
+        self::assertIsString($beerJson);
+        $client->request('POST', '/api/beer/add', [], [], [], $beerJson);
         self::assertSame(204, $client->getResponse()->getStatusCode());
 
         $client->request('GET', '/api/beer/beers');
