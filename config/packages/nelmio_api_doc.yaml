@@ -15,4 +15,4 @@ nelmio_api_doc:
               description: User related endpoints
     areas:
         path_patterns:
-            - ^/api/(?!docs(.json|)$) # Accepts routes under /api except /api/docs
+            - ^/api/(?!(re|)doc(s|)(.json|)$) # Accepts routes under /api except /api/docs
