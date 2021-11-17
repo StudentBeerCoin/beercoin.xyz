@@ -86,6 +86,7 @@ class Offer
                 'x' => $this->getLocationX(),
                 'y' => $this->getLocationY(),
             ],
+            'type' => $this->isBuying() ? 'buy' : 'sell',
         ];
     }
 
