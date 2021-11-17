@@ -44,6 +44,23 @@ class ApiUserController extends AbstractController
     }
 
     /**
+     * @Route("/api/user/{user}/offers", name="user_active_offers", methods={"GET"})
+     * @OA\Parameter(name="user", in="path", description="UUID of user")
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns IDs of user's active offers",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(type="string")
+     *     )
+     * )
+     */
+    public function activeOffers(User $user): Response
+    {
+        return new JsonResponse([]);
+    }
+
+    /**
      * @Route("/api/user/{user}/update", name="user_update", methods={"PUT"})
      * @OA\Parameter(name="user", in="path", description="UUID of user")
      * @OA\RequestBody(
@@ -74,22 +91,5 @@ class ApiUserController extends AbstractController
     public function updateDetails(User $user): Response
     {
         return new Response(null, 204);
-    }
-
-    /**
-     * @Route("/api/user/{user}/offers", name="user_active_offers", methods={"GET"})
-     * @OA\Parameter(name="user", in="path", description="UUID of user")
-     * @OA\Response(
-     *     response=200,
-     *     description="Returns IDs of user's active offers",
-     *     @OA\JsonContent(
-     *        type="array",
-     *        @OA\Items(type="string")
-     *     )
-     * )
-     */
-    public function activeOffers(User $user): Response
-    {
-        return new JsonResponse([]);
     }
 }

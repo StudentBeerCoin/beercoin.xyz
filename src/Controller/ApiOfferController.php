@@ -17,6 +17,54 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiOfferController extends AbstractController
 {
     /**
+     * @Route("/api/offer/offers", name="offer_list", methods={"GET"})
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns IDs of all offers",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(type="string")
+     *     )
+     * )
+     */
+    public function listOffers(): Response
+    {
+        return new JsonResponse([]);
+    }
+
+    /**
+     * @Route("/api/offer/offers/buy", name="offer_buy", methods={"GET"})
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns IDs of all buying offers",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(type="string")
+     *     )
+     * )
+     */
+    public function offersBuy(): Response
+    {
+        return new JsonResponse([]);
+    }
+
+    /**
+     * @Route("/api/offer/offers/sell", name="offer_sell", methods={"GET"})
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns IDs of all selling offers",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(type="string")
+     *     )
+     * )
+     */
+    public function offersSell(): Response
+    {
+        return new JsonResponse([]);
+    }
+
+    /**
      * @Route("/api/offer/{offer}/details", name="offer_details", methods={"GET"})
      * @OA\Parameter(name="offer", in="path", description="UUID of offer")
      * @OA\Response(
@@ -30,7 +78,8 @@ class ApiOfferController extends AbstractController
      *        @OA\Property(property="amount", type="number"),
      *        @OA\Property(property="price", type="number"),
      *        @OA\Property(property="total", type="number"),
-     *        @OA\Property(property="location", type="object")
+     *        @OA\Property(property="location", type="object"),
+     *        @OA\Property(property="type", type="boolean")
      *     ),
      * )
      *
@@ -39,39 +88,6 @@ class ApiOfferController extends AbstractController
     public function offerDetails(Offer $offer): Response
     {
         return new JsonResponse($offer->__toArray());
-    }
-
-    /**
-     * @Route("/api/offer/add", name="offer_add", methods={"POST"})
-     * @OA\RequestBody(
-     *       required=true,
-     *       description="Offer data",
-     *       @OA\JsonContent(
-     *          type="object",
-     *          @OA\Property(property="owner", type="string"),
-     *          @OA\Property(property="beer", type="string"),
-     *          @OA\Property(property="amount", type="number"),
-     *          @OA\Property(property="price", type="number"),
-     *          @OA\Property(property="total", type="number"),
-     *          @OA\Property(property="location", type="object")
-     *      )
-     * )
-     * @OA\Response(
-     *     response=204,
-     *     description="Successfuly added new offer"
-     * )
-     * @OA\Response(
-     *     response=400,
-     *     description="Incorrect offer details",
-     *     @OA\JsonContent(
-     *        type="object",
-     *        @OA\Property(property="message", type="string")
-     *     )
-     * )
-     */
-    public function addOffer(): Response
-    {
-        return new Response(null, 204);
     }
 
     /**
@@ -91,5 +107,39 @@ class ApiOfferController extends AbstractController
     public function nearbyOffers(float $x, float $y, float $radius): Response
     {
         return new JsonResponse([]);
+    }
+
+    /**
+     * @Route("/api/offer/add", name="offer_add", methods={"POST"})
+     * @OA\RequestBody(
+     *       required=true,
+     *       description="Offer data",
+     *       @OA\JsonContent(
+     *          type="object",
+     *          @OA\Property(property="owner", type="string"),
+     *          @OA\Property(property="beer", type="string"),
+     *          @OA\Property(property="amount", type="number"),
+     *          @OA\Property(property="price", type="number"),
+     *          @OA\Property(property="total", type="number"),
+     *          @OA\Property(property="location", type="object"),
+     *          @OA\Property(property="type", type="boolean")
+     *      )
+     * )
+     * @OA\Response(
+     *     response=204,
+     *     description="Successfuly added new offer"
+     * )
+     * @OA\Response(
+     *     response=400,
+     *     description="Incorrect offer details",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="message", type="string")
+     *     )
+     * )
+     */
+    public function addOffer(): Response
+    {
+        return new Response(null, 204);
     }
 }
