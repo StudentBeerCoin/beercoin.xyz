@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -42,7 +41,7 @@ class ApiAuthController extends AbstractController
      */
     public function register(): Response
     {
-        return new JsonResponse();
+        return new Response(null, 204);
     }
 
     /**
@@ -71,6 +70,6 @@ class ApiAuthController extends AbstractController
      */
     public function login(): Response
     {
-        return new JsonResponse();
+        return new Response(null, 204);
     }
 }

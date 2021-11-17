@@ -110,6 +110,6 @@ class ApiBeerController extends AbstractController
      */
     public function addBeer(): Response
     {
-        return new Response('', 204);
+        return new Response(null, 204);
     }
 }

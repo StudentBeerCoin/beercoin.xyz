@@ -73,7 +73,7 @@ class ApiUserController extends AbstractController
      */
     public function updateDetails(User $user): Response
     {
-        return new JsonResponse($user->__toArray());
+        return new Response(null, 204);
     }
 
     /**
@@ -81,7 +81,7 @@ class ApiUserController extends AbstractController
      * @OA\Parameter(name="user", in="path", description="UUID of user")
      * @OA\Response(
      *     response=200,
-     *     description="Returns ids of user's active offers",
+     *     description="Returns IDs of user's active offers",
      *     @OA\JsonContent(
      *        type="array",
      *        @OA\Items(type="string")
@@ -90,6 +90,6 @@ class ApiUserController extends AbstractController
      */
     public function activeOffers(User $user): Response
     {
-        return new JsonResponse($user->__toArray());
+        return new JsonResponse([]);
     }
 }
