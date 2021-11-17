@@ -17,6 +17,22 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiHistoryController extends AbstractController
 {
     /**
+     * @Route("/api/history/transactions", name="history_list", methods={"GET"})
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns IDs of all transactions",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(type="string")
+     *     )
+     * )
+     */
+    public function listHistory(): Response
+    {
+        return new JsonResponse([]);
+    }
+
+    /**
      * @Route("/api/history/{history}/details", name="history_details", methods={"GET"})
      * @OA\Parameter(name="history", in="path", description="UUID of transaction")
      * @OA\Response(
