@@ -3,6 +3,7 @@
     <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml.dist" scope="XML" />
     <method v="2">
       <option name="RunConfigurationTask" enabled="true" run_configuration_name="PHPStan" run_configuration_type="ShConfigurationType" />
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="Load fixtures" run_configuration_type="ShConfigurationType" />
     </method>
   </configuration>
 </component>

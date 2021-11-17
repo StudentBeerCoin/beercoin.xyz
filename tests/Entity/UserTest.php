@@ -27,6 +27,7 @@ class UserTest extends TestCase
         $user->setEmail('test@example.com');
         $user->setPhoneNumber('123123123');
         $user->setBalance(1.23456789);
+        $user->setPassword('t_password');
         $user->setLocation(0.1, 0.2);
 
         // Check if user is updated
@@ -44,5 +45,6 @@ class UserTest extends TestCase
             ],
         ];
         self::assertSame($testArray, $user->__toArray());
+        self::assertTrue($user->isPasswordValid('t_password'));
     }
 }

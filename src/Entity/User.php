@@ -56,6 +56,11 @@ class User
     private float $balance;
 
     /**
+     * @ORM\Column(type="string", length=64)
+     */
+    private string $password;
+
+    /**
      * @ORM\Column(type="float")
      */
     private float $locationX;
@@ -153,6 +158,21 @@ class User
     public function setBalance(float $balance): void
     {
         $this->balance = $balance;
+    }
+
+    public function getPasswordHash(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = hash('sha256', $password);
+    }
+
+    public function isPasswordValid(string $password): bool
+    {
+        return hash_equals($this->getPasswordHash(), hash('sha256', $password));
     }
 
     public function getLocationX(): float
