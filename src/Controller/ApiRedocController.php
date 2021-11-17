@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiRedocController extends AbstractController
 {
     /**
-     * @Route("/api/redoc", name="api_redoc")
+     * @Route("/api/redoc", name="api_redoc", methods={"GET"})
      */
     public function index(): Response
     {
