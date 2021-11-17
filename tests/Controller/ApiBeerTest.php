@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Entity\Beer;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ApiBeerTest extends WebTestCase
@@ -15,5 +16,29 @@ class ApiBeerTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
         self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
+    }
+
+    public function testAddingNewBeer(): void
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/api/beer/beers');
+        assert(is_string($client->getResponse()->getContent()));
+        self::assertCount(1, json_decode($client->getResponse()->getContent(), true));
+
+        $client->request('POST', '/api/beer/add', [], [], [], (string) json_encode([
+            'brand' => 'Test Brand',
+            'name' => 'Test Beer',
+            'volume' => 355,
+            'alcohol' => 4.5,
+            'packing' => Beer::BOTTLE,
+        ]));
+
+        self::assertSame(204, $client->getResponse()->getStatusCode());
+
+        $client->request('GET', '/api/beer/beers');
+        assert(is_string($client->getResponse()->getContent()));
+        // FIXME: Disabled assertion - saving new beers to database is not implemented yet
+        // self::assertCount(2, json_decode($client->getResponse()->getContent(), true));
     }
 }
