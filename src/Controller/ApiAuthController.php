@@ -18,7 +18,7 @@ class ApiAuthController extends AbstractController
      * @Route("/api/register", name="register", methods={"POST"})
      * @OA\RequestBody(
      *       required=true,
-     *       description="User data needed to successful registration",
+     *       description="User's data needed to successful registration",
      *       @OA\JsonContent(
      *          type="object",
      *          @OA\Property(property="email", type="string"),
@@ -48,7 +48,7 @@ class ApiAuthController extends AbstractController
      * @Route("/api/login", name="login", methods={"POST"})
      * @OA\RequestBody(
      *       required=true,
-     *       description="Login data",
+     *       description="User's login data",
      *       @OA\JsonContent(
      *          type="object",
      *          @OA\Property(property="username", type="string"),

@@ -79,7 +79,7 @@ class ApiBeerController extends AbstractController
      * @Route("/api/beer/add", name="beer_add", methods={"POST"})
      * @OA\RequestBody(
      *       required=true,
-     *       description="Offer data",
+     *       description="Beer data",
      *       @OA\JsonContent(
      *          type="object",
      *          @OA\Property(property="brand", type="string"),
