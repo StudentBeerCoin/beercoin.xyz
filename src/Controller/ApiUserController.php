@@ -22,7 +22,7 @@ class ApiUserController extends AbstractController
      * @OA\Parameter(name="user", in="path", description="UUID of user")
      * @OA\Response(
      *     response=200,
-     *     description="Returns user details",
+     *     description="Returns user's details",
      *     @OA\JsonContent(
      *        ref="#/components/schemas/User"
      *     ),
@@ -72,7 +72,7 @@ class ApiUserController extends AbstractController
      * @OA\Parameter(name="user", in="path", description="UUID of user")
      * @OA\RequestBody(
      *     required=true,
-     *     description="User data that is being updated",
+     *     description="User's data that is being updated",
      *     @OA\JsonContent(
      *        type="object",
      *        @OA\Property(property="username", type="string"),

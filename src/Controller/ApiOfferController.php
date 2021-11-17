@@ -95,7 +95,7 @@ class ApiOfferController extends AbstractController
      * @OA\Parameter(name="radius", in="path", description="Radius to find offers nearby")
      * @OA\Response(
      *     response=200,
-     *     description="Returns list of offers nearby",
+     *     description="Returns list of offers nearby specified location",
      *     @OA\JsonContent(
      *        type="array",
      *        @OA\Items(ref="#/components/schemas/Offer")

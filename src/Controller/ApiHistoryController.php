@@ -20,7 +20,7 @@ class ApiHistoryController extends AbstractController
      * @Route("/api/history/transactions", name="history_list", methods={"GET"})
      * @OA\Response(
      *     response=200,
-     *     description="Returns IDs of all transactions",
+     *     description="Returns all transactions history",
      *     @OA\JsonContent(
      *        type="array",
      *        @OA\Items(ref="#/components/schemas/History")
