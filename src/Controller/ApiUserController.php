@@ -85,7 +85,7 @@ class ApiUserController extends AbstractController
      * )
      * @OA\Response(
      *     response=204,
-     *     description="Successfuly changed user's details"
+     *     description="Successfully changed user's details"
      * )
      * @OA\Response(
      *     response=400,
