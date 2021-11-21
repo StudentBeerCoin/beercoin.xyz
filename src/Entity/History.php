@@ -46,9 +46,9 @@ class History
         return [
             'id' => $this->getId(),
             'offer' => $this->getOffer()
-                ->getId(),
+                ->__toArray(),
             'counterparty' => $this->getCounterparty()
-                ->getId(),
+                ->__toArray(),
             'amount' => $this->getAmount(),
         ];
     }

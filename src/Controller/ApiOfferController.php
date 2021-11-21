@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Offer;
+use App\Repository\OfferRepository;
 use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,6 +17,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ApiOfferController extends AbstractController
 {
+    private OfferRepository $offerRepository;
+
+    public function __construct(OfferRepository $offerRepository)
+    {
+        $this->offerRepository = $offerRepository;
+    }
+
     /**
      * @Route("/api/offer/offers", name="offer_list", methods={"GET"})
      * @OA\Response(
@@ -29,11 +37,17 @@ class ApiOfferController extends AbstractController
      */
     public function listOffers(): Response
     {
-        return new JsonResponse([]);
+        $offers = $this->offerRepository->findAll();
+        $res = [];
+        foreach ($offers as $offer) {
+            $res[] = $offer->__toArray();
+        }
+
+        return new JsonResponse($res);
     }
 
     /**
-     * @Route("/api/offer/offers/buy", name="offer_buy", methods={"GET"})
+     * @Route("/api/offer/buy/offers", name="offer_list_buy", methods={"GET"})
      * @OA\Response(
      *     response=200,
      *     description="Returns all buying offers",
@@ -45,11 +59,17 @@ class ApiOfferController extends AbstractController
      */
     public function offersBuy(): Response
     {
-        return new JsonResponse([]);
+        $offers = $this->offerRepository->findAllBuy();
+        $res = [];
+        foreach ($offers as $offer) {
+            $res[] = $offer->__toArray();
+        }
+
+        return new JsonResponse($res);
     }
 
     /**
-     * @Route("/api/offer/offers/sell", name="offer_sell", methods={"GET"})
+     * @Route("/api/offer/sell/offers", name="offer_list_sell", methods={"GET"})
      * @OA\Response(
      *     response=200,
      *     description="Returns all selling offers",
@@ -61,12 +81,18 @@ class ApiOfferController extends AbstractController
      */
     public function offersSell(): Response
     {
-        return new JsonResponse([]);
+        $offers = $this->offerRepository->findAllSell();
+        $res = [];
+        foreach ($offers as $offer) {
+            $res[] = $offer->__toArray();
+        }
+
+        return new JsonResponse($res);
     }
 
     /**
-     * @Route("/api/offer/{offer}/details", name="offer_details", methods={"GET"})
-     * @OA\Parameter(name="offer", in="path", description="UUID of offer")
+     * @Route("/api/offer/{offerId}/details", name="offer_details", methods={"GET"})
+     * @OA\Parameter(name="offerId", in="path", description="UUID of offer")
      * @OA\Response(
      *     response=200,
      *     description="Returns specified offer details",
@@ -76,15 +102,22 @@ class ApiOfferController extends AbstractController
      * )
      * @OA\Response(
      *     response=404,
-     *     description="Offer does not exists",
+     *     description="Offer does not exist",
      *     @OA\JsonContent(
      *        type="object",
      *        @OA\Property(property="message", type="string")
      *     )
      * )
      */
-    public function offerDetails(Offer $offer): Response
+    public function offerDetails(string $offerId): Response
     {
+        $offer = $this->offerRepository->find($offerId);
+        if (! $offer) {
+            return new JsonResponse([
+                'message' => sprintf('Offer %s not found', $offerId),
+            ], 404);
+        }
+
         return new JsonResponse($offer->__toArray());
     }
 
@@ -137,11 +170,14 @@ class ApiOfferController extends AbstractController
      */
     public function addOffer(): Response
     {
+        // TODO: create new offer
+
         return new Response(null, 204);
     }
 
     /**
-     * @Route("/api/offer/{offer}/buy", name="offer_buy", methods={"POST"})
+     * @Route("/api/offer/{offerId}/buy", name="offer_buy", methods={"POST"})
+     * @OA\Parameter(name="offerId", in="path", description="UUID of offer")
      * @OA\RequestBody(
      *       required=true,
      *       description="Offer data",
@@ -172,14 +208,21 @@ class ApiOfferController extends AbstractController
      *     )
      * )
      */
-    public function buyOffer(Offer $offer): Response
+    public function buyOffer(string $offerId): Response
     {
+        $offer = $this->offerRepository->find($offerId);
+        if (! $offer) {
+            return new JsonResponse([
+                'message' => sprintf('Offer %s not found', $offerId),
+            ], 404);
+        }
+
         return new Response(null, 204);
     }
 
     /**
-     * @Route("/api/offer/{offer}/update", name="offer_update", methods={"PUT"})
-     * @OA\Parameter(name="offer", in="path", description="UUID of offer")
+     * @Route("/api/offer/{offerId}/update", name="offer_update", methods={"PUT"})
+     * @OA\Parameter(name="offerId", in="path", description="UUID of offer")
      * @OA\RequestBody(
      *     required=true,
      *     description="Offer data that is being updated",
@@ -212,14 +255,23 @@ class ApiOfferController extends AbstractController
      *     )
      * )
      */
-    public function updateOffer(Offer $offer): Response
+    public function updateOffer(string $offerId): Response
     {
+        $offer = $this->offerRepository->find($offerId);
+        if (! $offer) {
+            return new JsonResponse([
+                'message' => sprintf('Offer %s not found', $offerId),
+            ], 404);
+        }
+
+        // TODO: update offer
+
         return new Response(null, 204);
     }
 
     /**
-     * @Route("/api/offer/{offer}/delete", name="offer_delete", methods={"DELETE"})
-     * @OA\Parameter(name="offer", in="path", description="UUID of offer")
+     * @Route("/api/offer/{offerId}/delete", name="offer_delete", methods={"DELETE"})
+     * @OA\Parameter(name="offerId", in="path", description="UUID of offer")
      * @OA\RequestBody(
      *     required=true,
      *     description="Owner's authentication data",
@@ -242,8 +294,17 @@ class ApiOfferController extends AbstractController
      *     )
      * )
      */
-    public function deleteOffer(Offer $offer): Response
+    public function deleteOffer(string $offerId): Response
     {
+        $offer = $this->offerRepository->find($offerId);
+        if (! $offer) {
+            return new JsonResponse([
+                'message' => sprintf('Offer %s not found', $offerId),
+            ], 404);
+        }
+
+        // TODO: remove offer
+
         return new Response(null, 204);
     }
 }

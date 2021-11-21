@@ -76,9 +76,9 @@ class Offer
         return [
             'id' => $this->getId(),
             'owner' => $this->getOwner()
-                ->getId(),
+                ->__toArray(),
             'beer' => $this->getBeer()
-                ->getId(),
+                ->__toArray(),
             'amount' => $this->getAmount(),
             'price' => $this->getPrice(),
             'total' => $this->getAmount() * $this->getPrice(),

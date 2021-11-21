@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\History;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,9 +18,16 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ApiUserController extends AbstractController
 {
+    private UserRepository $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     /**
-     * @Route("/api/user/{user}/details", name="user_details", methods={"GET"})
-     * @OA\Parameter(name="user", in="path", description="UUID of user")
+     * @Route("/api/user/{userId}/details", name="user_details", methods={"GET"})
+     * @OA\Parameter(name="userId", in="path", description="UUID of user")
      * @OA\Response(
      *     response=200,
      *     description="Returns user's details",
@@ -27,15 +35,30 @@ class ApiUserController extends AbstractController
      *        ref="#/components/schemas/User"
      *     ),
      * )
+     * @OA\Response(
+     *     response=404,
+     *     description="User does not exists",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="message", type="string")
+     *     )
+     * )
      */
-    public function userDetails(User $user): Response
+    public function userDetails(string $userId): Response
     {
+        $user = $this->userRepository->find($userId);
+        if (! $user) {
+            return new JsonResponse([
+                'message' => sprintf('User %s not found', $userId),
+            ], 404);
+        }
+
         return new JsonResponse($user->__toArray());
     }
 
     /**
-     * @Route("/api/user/{user}/offers", name="user_active_offers", methods={"GET"})
-     * @OA\Parameter(name="user", in="path", description="UUID of user")
+     * @Route("/api/user/{userId}/offers", name="user_active_offers", methods={"GET"})
+     * @OA\Parameter(name="userId", in="path", description="UUID of user")
      * @OA\Response(
      *     response=200,
      *     description="Returns user's active offers",
@@ -44,15 +67,30 @@ class ApiUserController extends AbstractController
      *        @OA\Items(ref="#/components/schemas/Offer")
      *     )
      * )
+     * @OA\Response(
+     *     response=404,
+     *     description="User does not exists",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="message", type="string")
+     *     )
+     * )
      */
-    public function activeOffers(User $user): Response
+    public function activeOffers(string $userId): Response
     {
+        $user = $this->userRepository->find($userId);
+        if (! $user) {
+            return new JsonResponse([
+                'message' => sprintf('User %s not found', $userId),
+            ], 404);
+        }
+
         return new JsonResponse([]);
     }
 
     /**
-     * @Route("/api/user/{user}/history", name="user_history", methods={"GET"})
-     * @OA\Parameter(name="user", in="path", description="UUID of user")
+     * @Route("/api/user/{userId}/history", name="user_history", methods={"GET"})
+     * @OA\Parameter(name="userId", in="path", description="UUID of user")
      * @OA\Response(
      *     response=200,
      *     description="Returns user's transaction history",
@@ -61,15 +99,30 @@ class ApiUserController extends AbstractController
      *        @OA\Items(ref="#/components/schemas/History")
      *     )
      * )
+     * @OA\Response(
+     *     response=404,
+     *     description="User does not exists",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="message", type="string")
+     *     )
+     * )
      */
-    public function userHistory(User $user): Response
+    public function userHistory(string $userId): Response
     {
+        $user = $this->userRepository->find($userId);
+        if (! $user) {
+            return new JsonResponse([
+                'message' => sprintf('User %s not found', $userId),
+            ], 404);
+        }
+
         return new JsonResponse([]);
     }
 
     /**
-     * @Route("/api/user/{user}/update", name="user_update", methods={"PUT"})
-     * @OA\Parameter(name="user", in="path", description="UUID of user")
+     * @Route("/api/user/{userId}/update", name="user_update", methods={"PUT"})
+     * @OA\Parameter(name="userId", in="path", description="UUID of user")
      * @OA\RequestBody(
      *     required=true,
      *     description="User's data that is being updated",
@@ -104,8 +157,15 @@ class ApiUserController extends AbstractController
      *     )
      * )
      */
-    public function updateUser(User $user): Response
+    public function updateUser(string $userId): Response
     {
+        $user = $this->userRepository->find($userId);
+        if (! $user) {
+            return new JsonResponse([
+                'message' => sprintf('User %s not found', $userId),
+            ], 404);
+        }
+
         return new Response(null, 204);
     }
 }

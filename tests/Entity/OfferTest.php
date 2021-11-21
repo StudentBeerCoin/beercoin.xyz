@@ -4,17 +4,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Entity;
 
-use App\Entity\Beer;
 use App\Entity\Offer;
-use App\Entity\User;
 use PHPUnit\Framework\TestCase;
 
 class OfferTest extends TestCase
 {
     public function testEntityGettersSetters(): void
     {
-        $user = new User();
-        $beer = new Beer();
         $offer = new Offer();
 
         // Check defaults
@@ -25,29 +21,5 @@ class OfferTest extends TestCase
         self::assertSame([$offer->getLocationX(), $offer->getLocationY()], $offer->getLocation());
         self::assertTrue($offer->isSelling());
         self::assertFalse($offer->isBuying());
-
-        // Set custom offer properties
-        $offer->setOwner($user);
-        $offer->setBeer($beer);
-        $offer->setAmount(5);
-        $offer->setPrice(0.4321);
-        $offer->setLocation(0.1, 0.2);
-        $offer->setTypeOfTransaction(Offer::BUY);
-
-        // Check if offer is updated
-        $testArray = [
-            'id' => $offer->getId(),
-            'owner' => $user->getId(),
-            'beer' => $beer->getId(),
-            'amount' => 5,
-            'price' => 0.4321,
-            'total' => 5 * 0.4321,
-            'location' => [
-                'x' => 0.1,
-                'y' => 0.2,
-            ],
-            'type' => 'buy',
-        ];
-        self::assertSame($testArray, $offer->__toArray());
     }
 }

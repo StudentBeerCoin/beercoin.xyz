@@ -20,31 +20,8 @@ class UserTest extends TestCase
         self::assertSame(19.906250, $user->getLocationY());
         self::assertSame([$user->getLocationX(), $user->getLocationY()], $user->getLocation());
 
-        // Set custom user properties
-        $user->setUsername('t_username');
-        $user->setName('t_name');
-        $user->setSurname('t_surname');
-        $user->setEmail('test@example.com');
-        $user->setPhoneNumber('123123123');
-        $user->setBalance(1.23456789);
+        // Set custom user password
         $user->setPassword('t_password');
-        $user->setLocation(0.1, 0.2);
-
-        // Check if user is updated
-        $testArray = [
-            'id' => $user->getId(),
-            'username' => 't_username',
-            'name' => 't_name',
-            'surname' => 't_surname',
-            'email' => 'test@example.com',
-            'phoneNumber' => '123123123',
-            'balance' => 1.23456789,
-            'location' => [
-                'x' => 0.1,
-                'y' => 0.2,
-            ],
-        ];
-        self::assertSame($testArray, $user->__toArray());
         self::assertTrue($user->isPasswordValid('t_password'));
     }
 }
