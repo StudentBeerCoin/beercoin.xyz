@@ -47,12 +47,8 @@ class ApiBeerController extends AbstractController
     }
 
     /**
-     * @Route("/api/beer/{beer}/details", name="beer_details", methods={"GET"})
-     * @OA\Parameter(
-     *     name="beer",
-     *     in="path",
-     *     description="UUID of beer"
-     * )
+     * @Route("/api/beer/{beerId}/details", name="beer_details", methods={"GET"})
+     * @OA\Parameter(name="beerId", in="path", description="UUID of beer")
      * @OA\Response(
      *     response=200,
      *     description="Returns specified beer details",
@@ -70,8 +66,15 @@ class ApiBeerController extends AbstractController
      *     )
      * )
      */
-    public function beerDetails(Beer $beer): Response
+    public function beerDetails(string $beerId): Response
     {
+        $beer = $this->beerRepository->find($beerId);
+        if (! $beer) {
+            return new JsonResponse([
+                'message' => sprintf('Beer %s not found', $beerId),
+            ], 404);
+        }
+
         return new JsonResponse($beer->__toArray());
     }
 
