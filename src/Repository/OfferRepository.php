@@ -21,32 +21,27 @@ class OfferRepository extends ServiceEntityRepository
         parent::__construct($registry, Offer::class);
     }
 
-    // /**
-    //  * @return Offer[] Returns an array of Offer objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Offer[]
+     */
+    public function findAllBuy(): array
     {
         return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('o.id', 'ASC')
-            ->setMaxResults(10)
+            ->where('o.typeOfTransaction = :transaction')
+            ->setParameter('transaction', Offer::BUY)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Offer
+    /**
+     * @return Offer[]
+     */
+    public function findAllSell(): array
     {
         return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
+            ->where('o.typeOfTransaction = :transaction')
+            ->setParameter('transaction', Offer::SELL)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult();
     }
-    */
 }

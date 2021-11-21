@@ -37,11 +37,17 @@ class ApiOfferController extends AbstractController
      */
     public function listOffers(): Response
     {
-        return new JsonResponse([]);
+        $offers = $this->offerRepository->findAll();
+        $res = [];
+        foreach ($offers as $offer) {
+            $res[] = $offer->__toArray();
+        }
+
+        return new JsonResponse($res);
     }
 
     /**
-     * @Route("/api/offer/offers/buy", name="offer_buy", methods={"GET"})
+     * @Route("/api/offer/buy/offers", name="offer_list_buy", methods={"GET"})
      * @OA\Response(
      *     response=200,
      *     description="Returns all buying offers",
@@ -53,11 +59,17 @@ class ApiOfferController extends AbstractController
      */
     public function offersBuy(): Response
     {
-        return new JsonResponse([]);
+        $offers = $this->offerRepository->findAllBuy();
+        $res = [];
+        foreach ($offers as $offer) {
+            $res[] = $offer->__toArray();
+        }
+
+        return new JsonResponse($res);
     }
 
     /**
-     * @Route("/api/offer/offers/sell", name="offer_sell", methods={"GET"})
+     * @Route("/api/offer/sell/offers", name="offer_list_sell", methods={"GET"})
      * @OA\Response(
      *     response=200,
      *     description="Returns all selling offers",
@@ -69,7 +81,13 @@ class ApiOfferController extends AbstractController
      */
     public function offersSell(): Response
     {
-        return new JsonResponse([]);
+        $offers = $this->offerRepository->findAllSell();
+        $res = [];
+        foreach ($offers as $offer) {
+            $res[] = $offer->__toArray();
+        }
+
+        return new JsonResponse($res);
     }
 
     /**
