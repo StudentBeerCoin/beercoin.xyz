@@ -37,9 +37,9 @@ class ApiHistoryController extends AbstractController
      */
     public function listHistory(): Response
     {
-        $allHistory = $this->historyRepository->findAll();
+        $transactions = $this->historyRepository->findAll();
         $res = [];
-        foreach ($allHistory as $transaction) {
+        foreach ($transactions as $transaction) {
             $res[] = $transaction->__toArray();
         }
 
