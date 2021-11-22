@@ -9,6 +9,7 @@ use App\Repository\BeerRepository;
 use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -101,12 +102,23 @@ class ApiBeerController extends AbstractController
      *     description="Incorrect beer details",
      *     @OA\JsonContent(
      *        type="object",
-     *        @OA\Property(property="message", type="string")
+     *        @OA\Property(property="message", type="string"),
+     *        @OA\Property(property="details", type="string")
      *     )
      * )
      */
-    public function addBeer(): Response
+    public function addBeer(Request $request): Response
     {
+        $requiredParams = ['brand', 'name', 'volume', 'alcohol', 'packing'];
+        $requestParams = array_keys($request->toArray());
+        $missingParams = array_values(array_diff($requiredParams, $requestParams));
+        if (! empty($missingParams)) {
+            return new JsonResponse([
+                'message' => 'Incorrect request',
+                'details' => sprintf('Missing following params: %s', implode(', ', $missingParams)),
+            ], 400);
+        }
+
         return new Response(null, 204);
     }
 }
