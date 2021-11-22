@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Beer;
 use App\Repository\BeerRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,9 +21,17 @@ class ApiBeerController extends AbstractController
 {
     private BeerRepository $beerRepository;
 
-    public function __construct(BeerRepository $beerRepository)
-    {
+//    FIXME: writing to database disabled for security reasons
+//    private EntityManagerInterface $entityManager;
+
+    public function __construct(
+        BeerRepository $beerRepository
+//        FIXME: writing to database disabled for security reasons
+//        EntityManagerInterface $entityManager
+    ) {
         $this->beerRepository = $beerRepository;
+//        FIXME: writing to database disabled for security reasons
+//        $this->entityManager = $entityManager;
     }
 
     /**
@@ -112,12 +121,26 @@ class ApiBeerController extends AbstractController
         $requiredParams = ['brand', 'name', 'volume', 'alcohol', 'packing'];
         $requestParams = array_keys($request->toArray());
         $missingParams = array_values(array_diff($requiredParams, $requestParams));
-        if (! empty($missingParams)) {
+        if (! empty($missingParams) || ! in_array(
+            strtolower($request->toArray()['packing']),
+            ['can', 'bottle'],
+            true
+        )) {
             return new JsonResponse([
                 'message' => 'Incorrect request',
                 'details' => sprintf('Missing following params: %s', implode(', ', $missingParams)),
             ], 400);
         }
+
+        $beer = new Beer();
+        $beer->setBrand($request->toArray()['brand']);
+        $beer->setName($request->toArray()['name']);
+        $beer->setVolume($request->toArray()['volume']);
+        $beer->setAlcohol($request->toArray()['alcohol']);
+        $beer->setPacking(strtolower($request->toArray()['packing']) === 'can' ? Beer::CAN : Beer::BOTTLE);
+//        FIXME: writing to database disabled for security reasons
+//        $this->entityManager->persist($beer);
+//        $this->entityManager->flush();
 
         return new Response(null, 204);
     }
