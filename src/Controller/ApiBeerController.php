@@ -121,14 +121,17 @@ class ApiBeerController extends AbstractController
         $requiredParams = ['brand', 'name', 'volume', 'alcohol', 'packing'];
         $requestParams = array_keys($request->toArray());
         $missingParams = array_values(array_diff($requiredParams, $requestParams));
-        if (! empty($missingParams) || ! in_array(
-            strtolower($request->toArray()['packing']),
-            ['can', 'bottle'],
-            true
-        )) {
+        if (! empty($missingParams)) {
             return new JsonResponse([
                 'message' => 'Incorrect request',
                 'details' => sprintf('Missing following params: %s', implode(', ', $missingParams)),
+            ], 400);
+        }
+
+        if (! in_array(strtolower($request->toArray()['packing']), ['can', 'bottle'], true)) {
+            return new JsonResponse([
+                'message' => 'Incorrect request',
+                'details' => 'Incorrect packing type - allowed values: can, bottle',
             ], 400);
         }
 
