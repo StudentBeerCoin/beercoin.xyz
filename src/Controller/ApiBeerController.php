@@ -22,16 +22,16 @@ class ApiBeerController extends AbstractController
     private BeerRepository $beerRepository;
 
 //    FIXME: writing to database disabled for security reasons
-//    private EntityManagerInterface $entityManager;
+    private EntityManagerInterface $entityManager;
 
     public function __construct(
-        BeerRepository $beerRepository
+        BeerRepository $beerRepository,
 //        FIXME: writing to database disabled for security reasons
-//        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager
     ) {
         $this->beerRepository = $beerRepository;
 //        FIXME: writing to database disabled for security reasons
-//        $this->entityManager = $entityManager;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -121,14 +121,17 @@ class ApiBeerController extends AbstractController
         $requiredParams = ['brand', 'name', 'volume', 'alcohol', 'packing'];
         $requestParams = array_keys($request->toArray());
         $missingParams = array_values(array_diff($requiredParams, $requestParams));
-        if (! empty($missingParams) || ! in_array(
-            strtolower($request->toArray()['packing']),
-            ['can', 'bottle'],
-            true
-        )) {
+        if (! empty($missingParams)) {
             return new JsonResponse([
                 'message' => 'Incorrect request',
                 'details' => sprintf('Missing following params: %s', implode(', ', $missingParams)),
+            ], 400);
+        }
+
+        if (! in_array(strtolower($request->toArray()['packing']), ['can', 'bottle'], true)) {
+            return new JsonResponse([
+                'message' => 'Incorrect request',
+                'details' => 'Incorrect packing type - allowed values: can, bottle',
             ], 400);
         }
 
@@ -139,8 +142,8 @@ class ApiBeerController extends AbstractController
         $beer->setAlcohol($request->toArray()['alcohol']);
         $beer->setPacking(strtolower($request->toArray()['packing']) === 'can' ? Beer::CAN : Beer::BOTTLE);
 //        FIXME: writing to database disabled for security reasons
-//        $this->entityManager->persist($beer);
-//        $this->entityManager->flush();
+        $this->entityManager->persist($beer);
+        $this->entityManager->flush();
 
         return new Response(null, 204);
     }
