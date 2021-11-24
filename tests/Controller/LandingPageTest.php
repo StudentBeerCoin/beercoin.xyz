@@ -14,6 +14,6 @@ class LandingPageTest extends WebTestCase
         $client->request('GET', '/');
 
         self::assertResponseIsSuccessful();
-        self::assertSelectorTextContains('h1', 'BeerCoin');
+        self::assertSelectorExists('h1 > img');
     }
 }
