@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Offer;
+use App\Repository\BeerRepository;
 use App\Repository\OfferRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -17,10 +20,22 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ApiOfferController extends AbstractController
 {
+    private BeerRepository $beerRepository;
+
+//    FIXME: writing to database disabled for security reasons
+//    private EntityManagerInterface $entityManager;
+
     private OfferRepository $offerRepository;
 
-    public function __construct(OfferRepository $offerRepository)
-    {
+    public function __construct(
+        OfferRepository $offerRepository,
+//        FIXME: writing to database disabled for security reasons
+//        EntityManagerInterface $entityManager,
+        BeerRepository $beerRepository
+    ) {
+        $this->beerRepository = $beerRepository;
+//        FIXME: writing to database disabled for security reasons
+//        $this->entityManager = $entityManager;
         $this->offerRepository = $offerRepository;
     }
 
@@ -137,6 +152,8 @@ class ApiOfferController extends AbstractController
      */
     public function nearbyOffers(float $x, float $y, float $radius): Response
     {
+        // TODO: implement
+
         return new JsonResponse([]);
     }
 
@@ -217,6 +234,8 @@ class ApiOfferController extends AbstractController
             ], 404);
         }
 
+        // TODO: implement
+
         return new Response(null, 204);
     }
 
@@ -255,7 +274,7 @@ class ApiOfferController extends AbstractController
      *     )
      * )
      */
-    public function updateOffer(string $offerId): Response
+    public function updateOffer(string $offerId, Request $request): Response
     {
         $offer = $this->offerRepository->find($offerId);
         if (! $offer) {
@@ -264,7 +283,40 @@ class ApiOfferController extends AbstractController
             ], 404);
         }
 
-        // TODO: update offer
+        $requiredParams = ['beer', 'amount', 'price', 'location'];
+        $requestParams = array_keys($request->toArray());
+        $missingParams = array_values(array_diff($requiredParams, $requestParams));
+        if (! empty($missingParams)) {
+            return new JsonResponse([
+                'message' => 'Incorrect request',
+                'details' => sprintf('Missing following params: %s', implode(', ', $missingParams)),
+            ], 400);
+        }
+
+        $beer = $this->beerRepository->find($request->toArray()['beer']);
+        if (! $beer) {
+            return new JsonResponse([
+                'message' => 'Incorrect request',
+                'details' => sprintf('Beer %s not found', $request->toArray()['beer']),
+            ], 400);
+        }
+
+        $location = $request->toArray()['location'];
+        $missingParams = array_values(array_diff(['x', 'y'], array_keys($location)));
+        if (! empty($missingParams)) {
+            return new JsonResponse([
+                'message' => 'Incorrect request',
+                'details' => sprintf('Missing following params in location: %s', implode(', ', $missingParams)),
+            ], 400);
+        }
+
+        $offer->setBeer($beer);
+        $offer->setAmount($request->toArray()['amount']);
+        $offer->setPrice($request->toArray()['price']);
+        $offer->setLocation($location['x'], $location['location']['y']);
+
+//        FIXME: writing to database disabled for security reasons
+//        $this->entityManager->flush();
 
         return new Response(null, 204);
     }
