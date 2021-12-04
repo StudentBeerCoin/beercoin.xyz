@@ -20,21 +20,21 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ApiUserController extends AbstractController
 {
-    private UserRepository $userRepository;
+    private HistoryRepository $historyRepository;
 
     private OfferRepository $offerRepository;
 
-    private HistoryRepository $historyRepository;
+    private UserRepository $userRepository;
 
     public function __construct(
-        UserRepository $userRepository,
+        HistoryRepository $historyRepository,
         OfferRepository $offerRepository,
-        HistoryRepository $historyRepository
+        UserRepository $userRepository
     )
     {
-        $this->userRepository = $userRepository;
-        $this->offerRepository = $offerRepository;
         $this->historyRepository = $historyRepository;
+        $this->offerRepository = $offerRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
