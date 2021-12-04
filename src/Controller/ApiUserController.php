@@ -30,8 +30,7 @@ class ApiUserController extends AbstractController
         HistoryRepository $historyRepository,
         OfferRepository $offerRepository,
         UserRepository $userRepository
-    )
-    {
+    ) {
         $this->historyRepository = $historyRepository;
         $this->offerRepository = $offerRepository;
         $this->userRepository = $userRepository;
