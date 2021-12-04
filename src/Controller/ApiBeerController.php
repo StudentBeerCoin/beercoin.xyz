@@ -22,16 +22,16 @@ class ApiBeerController extends AbstractController
     private BeerRepository $beerRepository;
 
 //    FIXME: writing to database disabled for security reasons
-    private EntityManagerInterface $entityManager;
+//    private EntityManagerInterface $entityManager;
 
     public function __construct(
-        BeerRepository $beerRepository,
+        BeerRepository $beerRepository
 //        FIXME: writing to database disabled for security reasons
-        EntityManagerInterface $entityManager
+//        EntityManagerInterface $entityManager
     ) {
         $this->beerRepository = $beerRepository;
 //        FIXME: writing to database disabled for security reasons
-        $this->entityManager = $entityManager;
+//        $this->entityManager = $entityManager;
     }
 
     /**
@@ -142,8 +142,8 @@ class ApiBeerController extends AbstractController
         $beer->setAlcohol($request->toArray()['alcohol']);
         $beer->setPacking(strtolower($request->toArray()['packing']) === 'can' ? Beer::CAN : Beer::BOTTLE);
 //        FIXME: writing to database disabled for security reasons
-        $this->entityManager->persist($beer);
-        $this->entityManager->flush();
+//        $this->entityManager->persist($beer);
+//        $this->entityManager->flush();
 
         return new Response(null, 204);
     }
