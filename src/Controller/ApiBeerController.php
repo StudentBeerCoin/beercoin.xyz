@@ -50,7 +50,7 @@ class ApiBeerController extends AbstractController
         $beers = $this->beerRepository->findAll();
         $res = [];
         foreach ($beers as $beer) {
-            $res[] = $beer->getId();
+            $res[] = $beer->__toArray();
         }
 
         return new JsonResponse($res);
