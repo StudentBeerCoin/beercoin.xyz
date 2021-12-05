@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Offer;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -41,6 +42,18 @@ class OfferRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('o')
             ->where('o.typeOfTransaction = :transaction')
             ->setParameter('transaction', Offer::SELL)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Offer[]
+     */
+    public function findAllByUser(User $user): array
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.owner = :owner')
+            ->setParameter('offer', $user->getId())
             ->getQuery()
             ->getResult();
     }

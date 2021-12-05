@@ -6,6 +6,8 @@ namespace App\Controller;
 
 use App\Entity\History;
 use App\Entity\User;
+use App\Repository\HistoryRepository;
+use App\Repository\OfferRepository;
 use App\Repository\UserRepository;
 use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,10 +20,19 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ApiUserController extends AbstractController
 {
+    private HistoryRepository $historyRepository;
+
+    private OfferRepository $offerRepository;
+
     private UserRepository $userRepository;
 
-    public function __construct(UserRepository $userRepository)
-    {
+    public function __construct(
+        HistoryRepository $historyRepository,
+        OfferRepository $offerRepository,
+        UserRepository $userRepository
+    ) {
+        $this->historyRepository = $historyRepository;
+        $this->offerRepository = $offerRepository;
         $this->userRepository = $userRepository;
     }
 
@@ -85,7 +96,9 @@ class ApiUserController extends AbstractController
             ], 404);
         }
 
-        return new JsonResponse([]);
+        $offers = $this->offerRepository->findAllByUser($user);
+
+        return new JsonResponse($offers);
     }
 
     /**
@@ -117,7 +130,9 @@ class ApiUserController extends AbstractController
             ], 404);
         }
 
-        return new JsonResponse([]);
+        $history = $this->historyRepository->findAllByUser($user);
+
+        return new JsonResponse($history);
     }
 
     /**
@@ -165,6 +180,8 @@ class ApiUserController extends AbstractController
                 'message' => sprintf('User %s not found', $userId),
             ], 404);
         }
+
+        // TODO: implement
 
         return new Response(null, 204);
     }

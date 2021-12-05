@@ -78,4 +78,31 @@ class ApiBeerTest extends WebTestCase
             'details' => 'Missing following params: volume, alcohol, packing',
         ], json_decode($client->getResponse()->getContent(), true));
     }
+
+    public function testAddingNewBeerWithIncorrectPacking(): void
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/api/beer/beers');
+        self::assertIsString($client->getResponse()->getContent());
+        self::assertCount(1, json_decode($client->getResponse()->getContent(), true));
+
+        $beer = [
+            'brand' => 'Test Brand',
+            'name' => 'Test Beer',
+            'volume' => 355,
+            'alcohol' => 4.5,
+            'packing' => 'paper bag',
+            // this is obviously wrong
+        ];
+        $beerJson = json_encode($beer);
+        self::assertIsString($beerJson);
+        $client->request('POST', '/api/beer/add', [], [], [], $beerJson);
+        self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertIsString($client->getResponse()->getContent());
+        self::assertSame([
+            'message' => 'Incorrect request',
+            'details' => 'Incorrect packing type - allowed values: can, bottle',
+        ], json_decode($client->getResponse()->getContent(), true));
+    }
 }
