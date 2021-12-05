@@ -128,7 +128,8 @@ class ApiBeerController extends AbstractController
             ], 400);
         }
 
-        if (! in_array(strtolower($request->toArray()['packing']), ['can', 'bottle'], true)) {
+        $packing = $request->toArray()['packing'];
+        if (! in_array(strtolower($packing), ['can', 'bottle'], true)) {
             return new JsonResponse([
                 'message' => 'Incorrect request',
                 'details' => 'Incorrect packing type - allowed values: can, bottle',
@@ -140,7 +141,7 @@ class ApiBeerController extends AbstractController
         $beer->setName($request->toArray()['name']);
         $beer->setVolume($request->toArray()['volume']);
         $beer->setAlcohol($request->toArray()['alcohol']);
-        $beer->setPacking(strtolower($request->toArray()['packing']) === 'can' ? Beer::CAN : Beer::BOTTLE);
+        $beer->setPacking(strtolower($packing) === 'can' ? Beer::CAN : Beer::BOTTLE);
 //        FIXME: writing to database disabled for security reasons
 //        $this->entityManager->persist($beer);
 //        $this->entityManager->flush();
