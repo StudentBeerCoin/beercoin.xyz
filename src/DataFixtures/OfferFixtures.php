@@ -35,6 +35,13 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
         $offer->setPrice(0.4672);
         $this->setReference('offer', $offer);
 
+        $buyOffer = new Offer();
+        $buyOffer->setOwner($user);
+        $buyOffer->setBeer($beer);
+        $buyOffer->setAmount(5);
+        $buyOffer->setPrice(0.4672);
+        $buyOffer->setTypeOfTransaction(Offer::BUY);
+
         $manager->persist($offer);
         $manager->flush();
     }
