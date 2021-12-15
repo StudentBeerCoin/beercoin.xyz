@@ -52,8 +52,7 @@ class ApiBeerTest extends WebTestCase
 
         $client->request('GET', '/api/beer/beers');
         self::assertIsString($client->getResponse()->getContent());
-//        FIXME: writing to database disabled for security reasons
-//        self::assertCount(2, json_decode($client->getResponse()->getContent(), true));
+        self::assertCount(2, json_decode($client->getResponse()->getContent(), true));
     }
 
     public function testAddingNewBeerWithIncorrectRequest(): void
