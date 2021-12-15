@@ -22,20 +22,17 @@ class ApiOfferController extends AbstractController
 {
     private BeerRepository $beerRepository;
 
-//    FIXME: writing to database disabled for security reasons
-//    private EntityManagerInterface $entityManager;
+    private EntityManagerInterface $entityManager;
 
     private OfferRepository $offerRepository;
 
     public function __construct(
         OfferRepository $offerRepository,
-//        FIXME: writing to database disabled for security reasons
-//        EntityManagerInterface $entityManager,
+        EntityManagerInterface $entityManager,
         BeerRepository $beerRepository
     ) {
         $this->beerRepository = $beerRepository;
-//        FIXME: writing to database disabled for security reasons
-//        $this->entityManager = $entityManager;
+        $this->entityManager = $entityManager;
         $this->offerRepository = $offerRepository;
     }
 
@@ -313,10 +310,9 @@ class ApiOfferController extends AbstractController
         $offer->setBeer($beer);
         $offer->setAmount($request->toArray()['amount']);
         $offer->setPrice($request->toArray()['price']);
-        $offer->setLocation($location['x'], $location['location']['y']);
+        $offer->setLocation($location['x'], $location['y']);
 
-//        FIXME: writing to database disabled for security reasons
-//        $this->entityManager->flush();
+        $this->entityManager->flush();
 
         return new Response(null, 204);
     }
