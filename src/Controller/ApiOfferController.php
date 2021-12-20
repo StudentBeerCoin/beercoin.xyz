@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Offer;
 use App\Repository\BeerRepository;
 use App\Repository\OfferRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,14 +27,18 @@ class ApiOfferController extends AbstractController
 
     private OfferRepository $offerRepository;
 
+    private UserRepository $userRepository;
+
     public function __construct(
-        OfferRepository $offerRepository,
+        BeerRepository $beerRepository,
         EntityManagerInterface $entityManager,
-        BeerRepository $beerRepository
+        OfferRepository $offerRepository,
+        UserRepository $userRepository
     ) {
         $this->beerRepository = $beerRepository;
         $this->entityManager = $entityManager;
         $this->offerRepository = $offerRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -165,7 +170,7 @@ class ApiOfferController extends AbstractController
      *          @OA\Property(property="beer", type="string"),
      *          @OA\Property(property="amount", type="number"),
      *          @OA\Property(property="price", type="number"),
-     *          @OA\Property(property="location", type="object"),
+     *          @OA\Property(property="location", ref="#/components/schemas/Location"),
      *          @OA\Property(property="type", type="string")
      *      )
      * )
@@ -178,13 +183,66 @@ class ApiOfferController extends AbstractController
      *     description="Incorrect offer details",
      *     @OA\JsonContent(
      *        type="object",
-     *        @OA\Property(property="message", type="string")
+     *        @OA\Property(property="message", type="string"),
+     *        @OA\Property(property="details", type="string")
      *     )
      * )
      */
-    public function addOffer(): Response
+    public function addOffer(Request $request): Response
     {
-        // TODO: create new offer
+        $requiredParams = ['owner', 'beer', 'amount', 'price', 'location', 'type'];
+        $requestParams = array_keys($request->toArray());
+        $missingParams = array_values(array_diff($requiredParams, $requestParams));
+        if (! empty($missingParams)) {
+            return new JsonResponse([
+                'message' => 'Incorrect request',
+                'details' => sprintf('Missing following params: %s', implode(', ', $missingParams)),
+            ], 400);
+        }
+
+        $user = $this->userRepository->find($request->toArray()['owner']);
+        if (! $user) {
+            return new JsonResponse([
+                'message' => 'Incorrect request',
+                'details' => sprintf('User %s not found', $request->toArray()['owner']),
+            ], 400);
+        }
+
+        $beer = $this->beerRepository->find($request->toArray()['beer']);
+        if (! $beer) {
+            return new JsonResponse([
+                'message' => 'Incorrect request',
+                'details' => sprintf('Beer %s not found', $request->toArray()['beer']),
+            ], 400);
+        }
+
+        $location = $request->toArray()['location'];
+        $missingParams = array_values(array_diff(['x', 'y'], array_keys($location)));
+        if (! empty($missingParams)) {
+            return new JsonResponse([
+                'message' => 'Incorrect request',
+                'details' => sprintf('Missing following params in location: %s', implode(', ', $missingParams)),
+            ], 400);
+        }
+
+        $type = $request->toArray()['type'];
+        if (! in_array(strtolower($type), ['buy', 'sell'], true)) {
+            return new JsonResponse([
+                'message' => 'Incorrect request',
+                'details' => 'Incorrect packing type - allowed values: buy, sell',
+            ], 400);
+        }
+
+        $offer = new Offer();
+        $offer->setOwner($user);
+        $offer->setBeer($beer);
+        $offer->setAmount($request->toArray()['amount']);
+        $offer->setPrice($request->toArray()['price']);
+        $offer->setLocation($location['x'], $location['y']);
+        $offer->setTypeOfTransaction(strtolower($type) === 'buy' ? Offer::BUY : Offer::SELL);
+
+        $this->entityManager->persist($offer);
+        $this->entityManager->flush();
 
         return new Response(null, 204);
     }
