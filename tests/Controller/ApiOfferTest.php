@@ -301,8 +301,8 @@ class ApiOfferTest extends WebTestCase
 
         $client->request('GET', '/api/offer/00000000-0000-0000-0000-000000000001/details');
         self::assertIsString($client->getResponse()->getContent());
-        $jsonResponse = json_decode($client->getResponse()->getContent(), true);
-        self::assertSame($offer['amount'] * $offer['price'], $jsonResponse['total']);
+        $response = json_decode($client->getResponse()->getContent(), true);
+        self::assertSame($offer['amount'] * $offer['price'], $response['total']);
     }
 
     public function testUpdatingNotExistingOfferData(): void
@@ -322,6 +322,12 @@ class ApiOfferTest extends WebTestCase
         self::assertIsString($offerJson);
         $client->request('PUT', '/api/offer/t_unknown/update', [], [], [], $offerJson);
         self::assertSame(404, $client->getResponse()->getStatusCode());
+        self::assertIsString($client->getResponse()->getContent());
+        $response = json_decode($client->getResponse()->getContent(), true);
+
+        self::assertSame([
+            'message' => 'Offer t_unknown not found',
+        ], $response);
     }
 
     public function testUpdatingOfferDataWithIncorrectRequest(): void
@@ -340,6 +346,13 @@ class ApiOfferTest extends WebTestCase
         self::assertIsString($offerJson);
         $client->request('PUT', '/api/offer/00000000-0000-0000-0000-000000000001/update', [], [], [], $offerJson);
         self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertIsString($client->getResponse()->getContent());
+        $response = json_decode($client->getResponse()->getContent(), true);
+
+        self::assertSame([
+            'message' => 'Incorrect request',
+            'details' => 'Missing following params: beer',
+        ], $response);
     }
 
     public function testUpdatingOfferDataWithNotExistingBeer(): void
@@ -359,6 +372,13 @@ class ApiOfferTest extends WebTestCase
         self::assertIsString($offerJson);
         $client->request('PUT', '/api/offer/00000000-0000-0000-0000-000000000001/update', [], [], [], $offerJson);
         self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertIsString($client->getResponse()->getContent());
+        $response = json_decode($client->getResponse()->getContent(), true);
+
+        self::assertSame([
+            'message' => 'Incorrect request',
+            'details' => 'Beer t_unknown not found',
+        ], $response);
     }
 
     public function testUpdatingOfferDataWithIncorrectLocation(): void
@@ -375,5 +395,12 @@ class ApiOfferTest extends WebTestCase
         self::assertIsString($offerJson);
         $client->request('PUT', '/api/offer/00000000-0000-0000-0000-000000000001/update', [], [], [], $offerJson);
         self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertIsString($client->getResponse()->getContent());
+        $response = json_decode($client->getResponse()->getContent(), true);
+
+        self::assertSame([
+            'message' => 'Incorrect request',
+            'details' => 'Missing following params in location: x, y',
+        ], $response);
     }
 }
