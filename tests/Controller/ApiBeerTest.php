@@ -52,12 +52,17 @@ class ApiBeerTest extends WebTestCase
 
         $client->request('GET', '/api/beer/beers');
         self::assertIsString($client->getResponse()->getContent());
-        self::assertCount($beerCount + 1, json_decode($client->getResponse()->getContent(), true));
+        $response = json_decode($client->getResponse()->getContent(), true);
+        self::assertCount($beerCount + 1, $response);
     }
 
     public function testAddingNewBeerWithIncorrectRequest(): void
     {
         $client = static::createClient();
+
+        $client->request('GET', '/api/beer/beers');
+        self::assertIsString($client->getResponse()->getContent());
+        $beerCount = count(json_decode($client->getResponse()->getContent(), true));
 
         $beer = [
             'brand' => 'Test Brand',
@@ -68,15 +73,26 @@ class ApiBeerTest extends WebTestCase
         $client->request('POST', '/api/beer/add', [], [], [], $beerJson);
         self::assertSame(400, $client->getResponse()->getStatusCode());
         self::assertIsString($client->getResponse()->getContent());
+        $response = json_decode($client->getResponse()->getContent(), true);
+
         self::assertSame([
             'message' => 'Incorrect request',
             'details' => 'Missing following params: volume, alcohol, packing',
-        ], json_decode($client->getResponse()->getContent(), true));
+        ], $response);
+
+        $client->request('GET', '/api/beer/beers');
+        self::assertIsString($client->getResponse()->getContent());
+        $response = json_decode($client->getResponse()->getContent(), true);
+        self::assertCount($beerCount, $response);
     }
 
     public function testAddingNewBeerWithIncorrectPacking(): void
     {
         $client = static::createClient();
+
+        $client->request('GET', '/api/beer/beers');
+        self::assertIsString($client->getResponse()->getContent());
+        $beerCount = count(json_decode($client->getResponse()->getContent(), true));
 
         $beer = [
             'brand' => 'Test Brand',
@@ -91,9 +107,16 @@ class ApiBeerTest extends WebTestCase
         $client->request('POST', '/api/beer/add', [], [], [], $beerJson);
         self::assertSame(400, $client->getResponse()->getStatusCode());
         self::assertIsString($client->getResponse()->getContent());
+        $response = json_decode($client->getResponse()->getContent(), true);
+
         self::assertSame([
             'message' => 'Incorrect request',
             'details' => 'Incorrect packing type - allowed values: can, bottle',
-        ], json_decode($client->getResponse()->getContent(), true));
+        ], $response);
+
+        $client->request('GET', '/api/beer/beers');
+        self::assertIsString($client->getResponse()->getContent());
+        $response = json_decode($client->getResponse()->getContent(), true);
+        self::assertCount($beerCount, $response);
     }
 }
