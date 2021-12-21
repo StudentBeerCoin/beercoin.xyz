@@ -137,7 +137,12 @@ class ApiUserController extends AbstractController
 
         $history = $this->historyRepository->findAllByUser($user);
 
-        return new JsonResponse($history);
+        $result = [];
+        foreach ($history as $transaction) {
+            $result[] = $transaction->__toArray();
+        }
+
+        return new JsonResponse($result);
     }
 
     /**
