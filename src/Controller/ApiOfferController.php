@@ -156,6 +156,7 @@ class ApiOfferController extends AbstractController
      *        @OA\Items(ref="#/components/schemas/Offer")
      *     )
      * )
+     * @codeCoverageIgnore
      */
     public function nearbyOffers(float $x, float $y, float $radius): Response
     {
@@ -284,6 +285,8 @@ class ApiOfferController extends AbstractController
      *        @OA\Property(property="message", type="string")
      *     )
      * )
+     *
+     * @codeCoverageIgnore
      */
     public function buyOffer(string $offerId): Response
     {
