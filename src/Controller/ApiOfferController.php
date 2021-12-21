@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Offer;
 use App\Repository\BeerRepository;
+use App\Repository\HistoryRepository;
 use App\Repository\OfferRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,6 +26,8 @@ class ApiOfferController extends AbstractController
 
     private EntityManagerInterface $entityManager;
 
+    private HistoryRepository $historyRepository;
+
     private OfferRepository $offerRepository;
 
     private UserRepository $userRepository;
@@ -32,11 +35,13 @@ class ApiOfferController extends AbstractController
     public function __construct(
         BeerRepository $beerRepository,
         EntityManagerInterface $entityManager,
+        HistoryRepository $historyRepository,
         OfferRepository $offerRepository,
         UserRepository $userRepository
     ) {
         $this->beerRepository = $beerRepository;
         $this->entityManager = $entityManager;
+        $this->historyRepository = $historyRepository;
         $this->offerRepository = $offerRepository;
         $this->userRepository = $userRepository;
     }
@@ -378,15 +383,6 @@ class ApiOfferController extends AbstractController
     /**
      * @Route("/api/offer/{offerId}/delete", name="offer_delete", methods={"DELETE"})
      * @OA\Parameter(name="offerId", in="path", description="UUID of offer")
-     * @OA\RequestBody(
-     *     required=true,
-     *     description="Owner's authentication data",
-     *     @OA\JsonContent(
-     *        type="object",
-     *        @OA\Property(property="user", type="string"),
-     *        @OA\Property(property="password", type="string")
-     *     ),
-     * )
      * @OA\Response(
      *     response=204,
      *     description="Successfully removed offer"
@@ -409,7 +405,14 @@ class ApiOfferController extends AbstractController
             ], 404);
         }
 
-        // TODO: remove offer
+        $history = $this->historyRepository->findAllByOffer($offer);
+
+        foreach ($history as $transaction) {
+            $transaction->setOffer(null);
+        }
+
+        $this->entityManager->remove($offer);
+        $this->entityManager->flush();
 
         return new Response(null, 204);
     }

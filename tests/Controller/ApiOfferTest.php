@@ -75,6 +75,7 @@ class ApiOfferTest extends WebTestCase
         $client = static::createClient();
 
         $client->request('GET', '/api/offer/offers');
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
         $offerCount = count(json_decode($client->getResponse()->getContent(), true));
 
@@ -92,6 +93,8 @@ class ApiOfferTest extends WebTestCase
         $offerJson = json_encode($offer);
         self::assertIsString($offerJson);
         $client->request('POST', '/api/offer/add', [], [], [], $offerJson);
+
+        self::assertResponseIsSuccessful();
         self::assertSame(204, $client->getResponse()->getStatusCode());
 
         $client->request('GET', '/api/offer/offers');
@@ -122,6 +125,7 @@ class ApiOfferTest extends WebTestCase
         self::assertIsString($offerJson);
         $client->request('POST', '/api/offer/add', [], [], [], $offerJson);
         self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
         $response = json_decode($client->getResponse()->getContent(), true);
 
@@ -159,6 +163,7 @@ class ApiOfferTest extends WebTestCase
         self::assertIsString($offerJson);
         $client->request('POST', '/api/offer/add', [], [], [], $offerJson);
         self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
         $response = json_decode($client->getResponse()->getContent(), true);
 
@@ -196,6 +201,7 @@ class ApiOfferTest extends WebTestCase
         self::assertIsString($offerJson);
         $client->request('POST', '/api/offer/add', [], [], [], $offerJson);
         self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
         $response = json_decode($client->getResponse()->getContent(), true);
 
@@ -230,6 +236,7 @@ class ApiOfferTest extends WebTestCase
         self::assertIsString($offerJson);
         $client->request('POST', '/api/offer/add', [], [], [], $offerJson);
         self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
         $response = json_decode($client->getResponse()->getContent(), true);
 
@@ -267,6 +274,7 @@ class ApiOfferTest extends WebTestCase
         self::assertIsString($offerJson);
         $client->request('POST', '/api/offer/add', [], [], [], $offerJson);
         self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
         $response = json_decode($client->getResponse()->getContent(), true);
 
@@ -297,6 +305,8 @@ class ApiOfferTest extends WebTestCase
         $offerJson = json_encode($offer);
         self::assertIsString($offerJson);
         $client->request('PUT', '/api/offer/00000000-0000-0000-0000-000000000001/update', [], [], [], $offerJson);
+
+        self::assertResponseIsSuccessful();
         self::assertSame(204, $client->getResponse()->getStatusCode());
 
         $client->request('GET', '/api/offer/00000000-0000-0000-0000-000000000001/details');
@@ -322,6 +332,7 @@ class ApiOfferTest extends WebTestCase
         self::assertIsString($offerJson);
         $client->request('PUT', '/api/offer/t_unknown/update', [], [], [], $offerJson);
         self::assertSame(404, $client->getResponse()->getStatusCode());
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
         $response = json_decode($client->getResponse()->getContent(), true);
 
@@ -346,6 +357,7 @@ class ApiOfferTest extends WebTestCase
         self::assertIsString($offerJson);
         $client->request('PUT', '/api/offer/00000000-0000-0000-0000-000000000001/update', [], [], [], $offerJson);
         self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
         $response = json_decode($client->getResponse()->getContent(), true);
 
@@ -372,6 +384,7 @@ class ApiOfferTest extends WebTestCase
         self::assertIsString($offerJson);
         $client->request('PUT', '/api/offer/00000000-0000-0000-0000-000000000001/update', [], [], [], $offerJson);
         self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
         $response = json_decode($client->getResponse()->getContent(), true);
 
@@ -395,12 +408,32 @@ class ApiOfferTest extends WebTestCase
         self::assertIsString($offerJson);
         $client->request('PUT', '/api/offer/00000000-0000-0000-0000-000000000001/update', [], [], [], $offerJson);
         self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
         $response = json_decode($client->getResponse()->getContent(), true);
 
         self::assertSame([
             'message' => 'Incorrect request',
             'details' => 'Missing following params in location: x, y',
+        ], $response);
+    }
+
+    public function testDeletingOffer(): void
+    {
+        $client = static::createClient();
+        $client->request('DELETE', '/api/offer/00000000-0000-0000-0000-000000000001/delete');
+
+        self::assertResponseIsSuccessful();
+        self::assertSame(204, $client->getResponse()->getStatusCode());
+
+        $client->request('DELETE', '/api/offer/00000000-0000-0000-0000-000000000001/delete');
+        self::assertSame(404, $client->getResponse()->getStatusCode());
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
+        self::assertIsString($client->getResponse()->getContent());
+        $response = json_decode($client->getResponse()->getContent(), true);
+
+        self::assertSame([
+            'message' => 'Offer 00000000-0000-0000-0000-000000000001 not found',
         ], $response);
     }
 }
