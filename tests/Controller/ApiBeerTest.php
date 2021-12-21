@@ -48,6 +48,8 @@ class ApiBeerTest extends WebTestCase
         $beerJson = json_encode($beer);
         self::assertIsString($beerJson);
         $client->request('POST', '/api/beer/add', [], [], [], $beerJson);
+
+        self::assertResponseIsSuccessful();
         self::assertSame(204, $client->getResponse()->getStatusCode());
 
         $client->request('GET', '/api/beer/beers');

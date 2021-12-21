@@ -102,6 +102,8 @@ class ApiUserTest extends WebTestCase
         $userJson = json_encode($user);
         self::assertIsString($userJson);
         $client->request('PUT', '/api/user/00000000-0000-0000-0000-000000000001/update', [], [], [], $userJson);
+
+        self::assertResponseIsSuccessful();
         self::assertSame(204, $client->getResponse()->getStatusCode());
 
         $client->request('GET', '/api/user/00000000-0000-0000-0000-000000000001/details');
