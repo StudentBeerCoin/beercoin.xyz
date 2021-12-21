@@ -98,7 +98,12 @@ class ApiUserController extends AbstractController
 
         $offers = $this->offerRepository->findAllByUser($user);
 
-        return new JsonResponse($offers);
+        $result = [];
+        foreach ($offers as $offer) {
+            $result[] = $offer->__toArray();
+        }
+
+        return new JsonResponse($result);
     }
 
     /**
