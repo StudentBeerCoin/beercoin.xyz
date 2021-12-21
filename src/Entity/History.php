@@ -21,9 +21,9 @@ class History
 
     /**
      * @ORM\ManyToOne(targetEntity=Offer::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
-    private Offer $offer;
+    private ?Offer $offer;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
@@ -58,12 +58,12 @@ class History
         return $this->id;
     }
 
-    public function getOffer(): Offer
+    public function getOffer(): ?Offer
     {
         return $this->offer;
     }
 
-    public function setOffer(Offer $offer): void
+    public function setOffer(?Offer $offer): void
     {
         $this->offer = $offer;
     }
