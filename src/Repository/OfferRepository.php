@@ -53,7 +53,7 @@ class OfferRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('o')
             ->where('o.owner = :owner')
-            ->setParameter('offer', $user->getId())
+            ->setParameter('owner', $user)
             ->getQuery()
             ->getResult();
     }
