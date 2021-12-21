@@ -9,9 +9,11 @@ use App\Entity\User;
 use App\Repository\HistoryRepository;
 use App\Repository\OfferRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -20,6 +22,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ApiUserController extends AbstractController
 {
+    private EntityManagerInterface $entityManager;
+
     private HistoryRepository $historyRepository;
 
     private OfferRepository $offerRepository;
@@ -27,10 +31,12 @@ class ApiUserController extends AbstractController
     private UserRepository $userRepository;
 
     public function __construct(
+        EntityManagerInterface $entityManager,
         HistoryRepository $historyRepository,
         OfferRepository $offerRepository,
         UserRepository $userRepository
     ) {
+        $this->entityManager = $entityManager;
         $this->historyRepository = $historyRepository;
         $this->offerRepository = $offerRepository;
         $this->userRepository = $userRepository;
@@ -182,7 +188,7 @@ class ApiUserController extends AbstractController
      *     )
      * )
      */
-    public function updateUser(string $userId): Response
+    public function updateUser(string $userId, Request $request): Response
     {
         $user = $this->userRepository->find($userId);
         if (! $user) {
@@ -191,7 +197,33 @@ class ApiUserController extends AbstractController
             ], 404);
         }
 
-        // TODO: implement
+        $requiredParams = ['username', 'name', 'surname', 'email', 'phoneNumber', 'location'];
+        $requestParams = array_keys($request->toArray());
+        $missingParams = array_values(array_diff($requiredParams, $requestParams));
+        if (! empty($missingParams)) {
+            return new JsonResponse([
+                'message' => 'Incorrect request',
+                'details' => sprintf('Missing following params: %s', implode(', ', $missingParams)),
+            ], 400);
+        }
+
+        $location = $request->toArray()['location'];
+        $missingParams = array_values(array_diff(['x', 'y'], array_keys($location)));
+        if (! empty($missingParams)) {
+            return new JsonResponse([
+                'message' => 'Incorrect request',
+                'details' => sprintf('Missing following params in location: %s', implode(', ', $missingParams)),
+            ], 400);
+        }
+
+        $user->setUsername($request->toArray()['username']);
+        $user->setName($request->toArray()['name']);
+        $user->setSurname($request->toArray()['surname']);
+        $user->setEmail($request->toArray()['email']);
+        $user->setPhoneNumber($request->toArray()['phoneNumber']);
+        $user->setLocation($location['x'], $location['y']);
+
+        $this->entityManager->flush();
 
         return new Response(null, 204);
     }
