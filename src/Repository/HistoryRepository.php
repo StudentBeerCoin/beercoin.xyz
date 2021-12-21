@@ -28,7 +28,7 @@ class HistoryRepository extends ServiceEntityRepository
     public function findAllByUser(User $user): array
     {
         return $this->createQueryBuilder('h')
-            ->where('o.counterparty = :counterparty')
+            ->where('h.counterparty = :counterparty')
             ->setParameter('counterparty', $user->getId())
             ->getQuery()
             ->getResult();
