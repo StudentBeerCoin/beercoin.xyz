@@ -38,8 +38,8 @@ class ApiOfferTest extends WebTestCase
         self::assertResponseIsSuccessful();
         self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
-        $data = json_decode($client->getResponse()->getContent(), true);
-        foreach ($data as $offer) {
+        $response = json_decode($client->getResponse()->getContent(), true);
+        foreach ($response as $offer) {
             self::assertSame('buy', $offer['type']);
         }
     }
@@ -52,8 +52,8 @@ class ApiOfferTest extends WebTestCase
         self::assertResponseIsSuccessful();
         self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
-        $data = json_decode($client->getResponse()->getContent(), true);
-        self::assertCount(2, $data);
+        $response = json_decode($client->getResponse()->getContent(), true);
+        self::assertCount(2, $response);
     }
 
     public function testListingOffersForSale(): void
@@ -64,8 +64,8 @@ class ApiOfferTest extends WebTestCase
         self::assertResponseIsSuccessful();
         self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
-        $data = json_decode($client->getResponse()->getContent(), true);
-        foreach ($data as $offer) {
+        $response = json_decode($client->getResponse()->getContent(), true);
+        foreach ($response as $offer) {
             self::assertSame('sell', $offer['type']);
         }
     }
