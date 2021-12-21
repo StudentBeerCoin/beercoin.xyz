@@ -74,6 +74,7 @@ class ApiBeerTest extends WebTestCase
         self::assertIsString($beerJson);
         $client->request('POST', '/api/beer/add', [], [], [], $beerJson);
         self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
         $response = json_decode($client->getResponse()->getContent(), true);
 
@@ -108,6 +109,7 @@ class ApiBeerTest extends WebTestCase
         self::assertIsString($beerJson);
         $client->request('POST', '/api/beer/add', [], [], [], $beerJson);
         self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
         $response = json_decode($client->getResponse()->getContent(), true);
 

@@ -22,12 +22,13 @@ class ApiUserTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/api/user/t_unknown/details');
 
+        self::assertSame(404, $client->getResponse()->getStatusCode());
         self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
+
         self::assertSame([
             'message' => 'User t_unknown not found',
         ], json_decode($client->getResponse()->getContent(), true));
-        self::assertSame(404, $client->getResponse()->getStatusCode());
     }
 
     public function testListUsersOffers(): void
@@ -49,12 +50,13 @@ class ApiUserTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/api/user/t_unknown/offers');
 
+        self::assertSame(404, $client->getResponse()->getStatusCode());
         self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
+
         self::assertSame([
             'message' => 'User t_unknown not found',
         ], json_decode($client->getResponse()->getContent(), true));
-        self::assertSame(404, $client->getResponse()->getStatusCode());
     }
 
     public function testListUsersHistory(): void
@@ -65,6 +67,7 @@ class ApiUserTest extends WebTestCase
         self::assertResponseIsSuccessful();
         self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
+
         $response = json_decode($client->getResponse()->getContent(), true);
         foreach ($response as $history) {
             self::assertSame('00000000-0000-0000-0000-000000000002', $history['counterparty']['id']);
@@ -76,12 +79,13 @@ class ApiUserTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/api/user/t_unknown/history');
 
+        self::assertSame(404, $client->getResponse()->getStatusCode());
         self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
+
         self::assertSame([
             'message' => 'User t_unknown not found',
         ], json_decode($client->getResponse()->getContent(), true));
-        self::assertSame(404, $client->getResponse()->getStatusCode());
     }
 
     public function testUpdatingUserData(): void
@@ -108,6 +112,7 @@ class ApiUserTest extends WebTestCase
 
         $client->request('GET', '/api/user/00000000-0000-0000-0000-000000000001/details');
         self::assertIsString($client->getResponse()->getContent());
+
         $response = json_decode($client->getResponse()->getContent(), true);
         foreach ($user as $key => $value) {
             self::assertSame($value, $response[$key]);
@@ -132,13 +137,14 @@ class ApiUserTest extends WebTestCase
         $userJson = json_encode($user);
         self::assertIsString($userJson);
         $client->request('PUT', '/api/user/t_unknown/update', [], [], [], $userJson);
+
         self::assertSame(404, $client->getResponse()->getStatusCode());
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
-        $response = json_decode($client->getResponse()->getContent(), true);
 
         self::assertSame([
             'message' => 'User t_unknown not found',
-        ], $response);
+        ], json_decode($client->getResponse()->getContent(), true));
     }
 
     public function testUpdatingOfferDataWithIncorrectRequest(): void
@@ -158,14 +164,15 @@ class ApiUserTest extends WebTestCase
         $userJson = json_encode($user);
         self::assertIsString($userJson);
         $client->request('PUT', '/api/user/00000000-0000-0000-0000-000000000001/update', [], [], [], $userJson);
+
         self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
-        $response = json_decode($client->getResponse()->getContent(), true);
 
         self::assertSame([
             'message' => 'Incorrect request',
             'details' => 'Missing following params: phoneNumber',
-        ], $response);
+        ], json_decode($client->getResponse()->getContent(), true));
     }
 
     public function testUpdatingOfferDataWithIncorrectLocation(): void
@@ -183,13 +190,14 @@ class ApiUserTest extends WebTestCase
         $userJson = json_encode($user);
         self::assertIsString($userJson);
         $client->request('PUT', '/api/user/00000000-0000-0000-0000-000000000001/update', [], [], [], $userJson);
+
         self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
-        $response = json_decode($client->getResponse()->getContent(), true);
 
         self::assertSame([
             'message' => 'Incorrect request',
             'details' => 'Missing following params in location: x, y',
-        ], $response);
+        ], json_decode($client->getResponse()->getContent(), true));
     }
 }
