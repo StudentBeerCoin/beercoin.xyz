@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @OA\Tag(name="Auth")
+ * @codeCoverageIgnore
  */
 class ApiAuthController extends AbstractController
 {

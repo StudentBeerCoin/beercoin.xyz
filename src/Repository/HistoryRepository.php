@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\History;
+use App\Entity\Offer;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -28,8 +29,20 @@ class HistoryRepository extends ServiceEntityRepository
     public function findAllByUser(User $user): array
     {
         return $this->createQueryBuilder('h')
-            ->where('o.counterparty = :counterparty')
-            ->setParameter('counterparty', $user->getId())
+            ->where('h.counterparty = :counterparty')
+            ->setParameter('counterparty', $user)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return History[]
+     */
+    public function findAllByOffer(Offer $offer): array
+    {
+        return $this->createQueryBuilder('h')
+            ->where('h.offer = :offer')
+            ->setParameter('offer', $offer)
             ->getQuery()
             ->getResult();
     }

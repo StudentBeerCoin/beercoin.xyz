@@ -36,7 +36,7 @@ class ApiBeerTest extends WebTestCase
 
         $client->request('GET', '/api/beer/beers');
         self::assertIsString($client->getResponse()->getContent());
-        self::assertCount(1, json_decode($client->getResponse()->getContent(), true));
+        $beerCount = count(json_decode($client->getResponse()->getContent(), true));
 
         $beer = [
             'brand' => 'Test Brand',
@@ -48,12 +48,14 @@ class ApiBeerTest extends WebTestCase
         $beerJson = json_encode($beer);
         self::assertIsString($beerJson);
         $client->request('POST', '/api/beer/add', [], [], [], $beerJson);
+
+        self::assertResponseIsSuccessful();
         self::assertSame(204, $client->getResponse()->getStatusCode());
 
         $client->request('GET', '/api/beer/beers');
         self::assertIsString($client->getResponse()->getContent());
-//        FIXME: writing to database disabled for security reasons
-//        self::assertCount(2, json_decode($client->getResponse()->getContent(), true));
+        $response = json_decode($client->getResponse()->getContent(), true);
+        self::assertCount($beerCount + 1, $response);
     }
 
     public function testAddingNewBeerWithIncorrectRequest(): void
@@ -62,7 +64,7 @@ class ApiBeerTest extends WebTestCase
 
         $client->request('GET', '/api/beer/beers');
         self::assertIsString($client->getResponse()->getContent());
-        self::assertCount(1, json_decode($client->getResponse()->getContent(), true));
+        $beerCount = count(json_decode($client->getResponse()->getContent(), true));
 
         $beer = [
             'brand' => 'Test Brand',
@@ -72,11 +74,19 @@ class ApiBeerTest extends WebTestCase
         self::assertIsString($beerJson);
         $client->request('POST', '/api/beer/add', [], [], [], $beerJson);
         self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
+        $response = json_decode($client->getResponse()->getContent(), true);
+
         self::assertSame([
             'message' => 'Incorrect request',
             'details' => 'Missing following params: volume, alcohol, packing',
-        ], json_decode($client->getResponse()->getContent(), true));
+        ], $response);
+
+        $client->request('GET', '/api/beer/beers');
+        self::assertIsString($client->getResponse()->getContent());
+        $response = json_decode($client->getResponse()->getContent(), true);
+        self::assertCount($beerCount, $response);
     }
 
     public function testAddingNewBeerWithIncorrectPacking(): void
@@ -85,7 +95,7 @@ class ApiBeerTest extends WebTestCase
 
         $client->request('GET', '/api/beer/beers');
         self::assertIsString($client->getResponse()->getContent());
-        self::assertCount(1, json_decode($client->getResponse()->getContent(), true));
+        $beerCount = count(json_decode($client->getResponse()->getContent(), true));
 
         $beer = [
             'brand' => 'Test Brand',
@@ -99,10 +109,18 @@ class ApiBeerTest extends WebTestCase
         self::assertIsString($beerJson);
         $client->request('POST', '/api/beer/add', [], [], [], $beerJson);
         self::assertSame(400, $client->getResponse()->getStatusCode());
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
         self::assertIsString($client->getResponse()->getContent());
+        $response = json_decode($client->getResponse()->getContent(), true);
+
         self::assertSame([
             'message' => 'Incorrect request',
             'details' => 'Incorrect packing type - allowed values: can, bottle',
-        ], json_decode($client->getResponse()->getContent(), true));
+        ], $response);
+
+        $client->request('GET', '/api/beer/beers');
+        self::assertIsString($client->getResponse()->getContent());
+        $response = json_decode($client->getResponse()->getContent(), true);
+        self::assertCount($beerCount, $response);
     }
 }
