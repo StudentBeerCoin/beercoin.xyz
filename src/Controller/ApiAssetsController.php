@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
+use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use OpenApi\Annotations as OA;
-use function PHPUnit\Framework\assertIsString;
 
 /**
  * @OA\Tag(name="Assets")
@@ -23,13 +23,15 @@ class ApiAssetsController extends AbstractController
      *     description="Returns specified beer image. If image does not exist, default image is returned",
      * )
      */
-    public function beerImage(String $beerId): Response
+    public function beerImage(string $beerId): Response
     {
-        $rootPath = $this->getParameter('kernel.project_dir');
-        assertIsString($rootPath);
+        /**
+         * @phpstan-ignore-next-line
+         */
+        $rootPath = (string) $this->getParameter('kernel.project_dir');
         $beerPath = sprintf('%s/public/beers/%s.png', $rootPath, $beerId);
 
-        if (!file_exists($beerPath)) {
+        if (! file_exists($beerPath)) {
             $beerPath = sprintf('%s/public/beers/_unknown.png', $rootPath);
         }
 
