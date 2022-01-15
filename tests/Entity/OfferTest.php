@@ -22,4 +22,12 @@ class OfferTest extends TestCase
         self::assertTrue($offer->isSelling());
         self::assertFalse($offer->isBuying());
     }
+
+    public function testDistanceTo(): void
+    {
+        $offer = new Offer();
+        // Distance to "Olimp" dorm from campus
+        $distance = $offer->distanceTo(50.0692278, 19.9043930);
+        self::assertLessThan(0.2, $distance);
+    }
 }
