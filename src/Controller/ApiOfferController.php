@@ -156,13 +156,18 @@ class ApiOfferController extends AbstractController
      *        @OA\Items(ref="#/components/schemas/Offer")
      *     )
      * )
-     * @codeCoverageIgnore
      */
     public function nearbyOffers(float $x, float $y, float $radius): Response
     {
-        // TODO: implement
+        $offers = $this->offerRepository->findAll();
+        $res = [];
+        foreach ($offers as $offer) {
+            if ($offer->distanceTo($x, $y) <= $radius) {
+                $res[] = $offer->__toArray();
+            }
+        }
 
-        return new JsonResponse([]);
+        return new JsonResponse($res);
     }
 
     /**

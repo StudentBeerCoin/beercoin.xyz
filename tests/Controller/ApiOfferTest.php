@@ -30,6 +30,18 @@ class ApiOfferTest extends WebTestCase
         self::assertSame(404, $client->getResponse()->getStatusCode());
     }
 
+    public function testListingOffers(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/api/offer/offers');
+
+        self::assertResponseIsSuccessful();
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
+        self::assertIsString($client->getResponse()->getContent());
+        $response = json_decode($client->getResponse()->getContent(), true);
+        self::assertCount(2, $response);
+    }
+
     public function testListingOffersToBuy(): void
     {
         $client = static::createClient();
@@ -44,18 +56,6 @@ class ApiOfferTest extends WebTestCase
         }
     }
 
-    public function testListingOffers(): void
-    {
-        $client = static::createClient();
-        $client->request('GET', '/api/offer/offers');
-
-        self::assertResponseIsSuccessful();
-        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
-        self::assertIsString($client->getResponse()->getContent());
-        $response = json_decode($client->getResponse()->getContent(), true);
-        self::assertCount(2, $response);
-    }
-
     public function testListingOffersForSale(): void
     {
         $client = static::createClient();
@@ -68,6 +68,25 @@ class ApiOfferTest extends WebTestCase
         foreach ($response as $offer) {
             self::assertSame('sell', $offer['type']);
         }
+    }
+
+    public function testListingOffersNearby(): void
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/api/offer/find/50.0692278/19.9043930/0.2');
+        self::assertResponseIsSuccessful();
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
+        self::assertIsString($client->getResponse()->getContent());
+        $response = json_decode($client->getResponse()->getContent(), true);
+        self::assertCount(2, $response);
+
+        $client->request('GET', '/api/offer/find/50.0692278/19.9043930/0.16');
+        self::assertResponseIsSuccessful();
+        self::assertSame('application/json', $client->getResponse()->headers->get('content-type'));
+        self::assertIsString($client->getResponse()->getContent());
+        $response = json_decode($client->getResponse()->getContent(), true);
+        self::assertCount(0, $response);
     }
 
     public function testAddingNewOffer(): void

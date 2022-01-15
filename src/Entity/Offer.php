@@ -171,6 +171,20 @@ class Offer
         }
     }
 
+    public function distanceTo(float $x, float $y) : float
+    {
+        $R = 6371;
+
+        $dLat = deg2rad($x - $this->getLocationX());
+        $dLon = deg2rad($y - $this->getLocationY());
+        $lat1 = deg2rad($this->getLocationX());
+        $lat2 = deg2rad($x);
+
+        $a = sin($dLat / 2) * sin($dLat / 2) + sin($dLon / 2) * sin($dLon / 2) * cos($lat1) * cos($lat2);
+        $c = 2 * asin(sqrt($a));
+        return $R * $c;
+    }
+
     public function isSelling(): bool
     {
         return $this->typeOfTransaction === self::SELL;
